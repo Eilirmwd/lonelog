@@ -2,7 +2,7 @@
 title: Lonelog
 subtitle: "Una notazione standard per registrare le tue sessioni di GDR solitario"
 author: Roberto Bisceglie
-version: 1.1.0
+version: 1.2.0
 license: CC BY-SA 4.0
 lang: it
 ---
@@ -1974,9 +1974,64 @@ Cosa succede se l'oracolo non aiuta?
 
 ```
 
-**Pro tip:** Se un risultato dell'oracolo non innesca la finzione, va bene riformulare la domanda o tirare di nuovo. L'oracolo serve la tua storia, non il contrario.
+**Suggerimento:** Se un risultato dell'oracolo non innesca la finzione, va bene riformulare la domanda o tirare di nuovo. L'oracolo serve la tua storia, non il contrario.
 
----
+## 10. Add-on
+
+I cinque simboli principali — `@`, `?`, `d:`, `->`, `=>` — coprono la stragrande maggioranza del gioco in solitaria. Ma alcuni giochi vanno più in profondità in direzioni specifiche: combattimento tattico con iniziativa e tracciamento dei danni, dungeon crawling con stati delle stanze e gestione della luce, sistemi di risorse dove ogni torcia conta. Queste esigenze sono reali, ma non sono universali.
+
+A questo servono gli add-on.
+
+### 10.1 Cosa sono gli Add-on
+
+Un add-on è un **documento di estensione autonomo** che approfondisce la notazione Lonelog per un tipo specifico di gioco. Ogni add-on:
+
+- Funziona con i cinque simboli principali — li estende, non li sostituisce mai
+- Introduce convenzioni (tag, formati, blocchi strutturali) adatte al suo dominio
+- Funziona in modo indipendente — leggi solo l'add-on di cui hai bisogno, non l'intero ecosistema
+- Si integra perfettamente con altri add-on se ne usi più di uno
+
+Gli add-on risiedono in file separati piuttosto che in questo documento. È una scelta deliberata: un dungeon crawler che non combatte mai in ordine di iniziativa non dovrebbe dover scorrere quattro pagine di regole di combattimento. Il nucleo di Lonelog dovrebbe rimanere snello. Gli add-on permettono al sistema di crescere senza appesantire il manuale che porti al tavolo.
+
+Pensa al nucleo come a una lingua, e agli add-on come a vocabolari di dominio. Un linguista e un marinaio parlano entrambi inglese, ma il marinaio ha parole per cose di cui il linguista non ha bisogno. Le parole non entrano in conflitto — si estendono.
+
+### 10.2 Perché File Separati
+
+Tre motivi:
+
+**Scarica solo ciò di cui hai bisogno.** Su itch.io, in un vault Markdown, o stampato e inserito in un taccuino — prendi gli add-on che corrispondono alla tua campagna attuale. Giochi a Ironsworn? Prendi l'add-on per il tracciamento delle risorse. Giochi un dungeon crawl? Aggiungi l'add-on per i dungeon. Niente che non usi.
+
+**Aggiornamento indipendente.** Se l'Add-on Combattimento affina la sua notazione per l'iniziativa, quell'aggiornamento non tocca la specifica principale. Nucleo e add-on possono evolversi al proprio ritmo, rimanere sincronizzati dove necessario e divergere dove legittimamente differiscono.
+
+**Condividi e rimixa liberamente.** La comunità può scrivere, pubblicare e condividere add-on senza modificare il documento principale. Un giocatore che sviluppa una notazione brillante per l'esplorazione esagonale (hex crawling) può rilasciarla come add-on Lonelog. Il nucleo condiviso assicura che sia immediatamente leggibile per chiunque conosca Lonelog.
+
+### 10.3 Come Usare gli Add-on
+
+**Inizia con il nucleo.** Se sei nuovo a Lonelog, passa almeno una o due sessioni solo con i cinque simboli principali prima di aggiungere altro. Il nucleo gestisce più di quanto potresti aspettarti.
+
+**Aggiungine uno alla volta.** Se stai aggiungendo una notazione per dungeon crawl e un sistema di tracciamento risorse nella stessa campagna, introducili a una sessione di distanza. Questo ti dà il tempo di assimilare ciascuno prima di combinarli.
+
+**Mescola e abbina liberamente.** Gli add-on sono progettati per coesistere. L'Add-on Combattimento e l'Add-on Dungeon Crawling, ad esempio, sono scritti per funzionare nello stesso registro di sessione senza conflitti di simboli.
+
+**Nel dubbio, saltalo.** Se un add-on sembra un sovraccarico piuttosto che un aiuto, non usarlo. La notazione principale è sempre sufficiente. Gli add-on servono il tuo gioco; il tuo gioco non serve gli add-on.
+
+### 10.4 Add-on Disponibili
+
+I seguenti add-on fanno parte dell'ecosistema ufficiale Lonelog:
+
+| Add-on | File | Ideale Per |
+|--------|------|----------|
+| Combat Add-on | `addons/combat.md` | Combattimenti tattici, iniziativa, tracciamento PF |
+| Dungeon Crawling Add-on | `addons/dungeon.md` | Esplorazione stanze, luce, trappole, note di mappatura |
+| Resource Tracking Add-on | `addons/resources.md` | Inventario, dadi uso, ricchezza, provviste |
+
+Gli add-on creati dalla comunità seguono le stesse convenzioni. Vedi le **Linee Guida per Add-on della Comunità** per sapere come scriverne uno, e la pagina itch.io di Lonelog per la libreria della comunità.
+
+### 10.5 Una Nota per gli Autori di Add-on
+
+Se stai scrivendo un add-on Lonelog — per uso personale, per condividerlo con amici o per pubblicarlo — le **Linee Guida per Add-on della Comunità** e il **Template per Add-on** sono il tuo punto di partenza. Coprono i vincoli di design che mantengono gli add-on compatibili con il nucleo, il formato dei metadati richiesto e come strutturare gli esempi in modo che si leggano naturalmente insieme ai registri Lonelog principali.
+
+Il principio guida: **estendi, non sostituire.** Un add-on Lonelog che inventa il proprio simbolo di azione non è un add-on Lonelog — è un fork. La forza dell'ecosistema deriva dalle convenzioni condivise al centro, con la creatività nelle estensioni.
 
 ## Appendici
 
@@ -2127,6 +2182,7 @@ Questa notazione è ispirata al [Valley Standard](https://alfredvalley.itch.io/t
 
 **Cronologia Versioni:**
 
+* v 1.2.0: Aggiunta la Sezione 10: Add-on.
 * v 1.1.0: Chiarito l'uso della licenza. Aggiunte specifiche per: definizioni inline, set di opzioni filtrate e blocchi di risultati multi-riga nella sezione 4.3.
 * v 1.0.0: Evoluto da Notazione per GDR Solitario v2.0 di Roberto Bisceglie
 

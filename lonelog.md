@@ -2,7 +2,7 @@
 title: Lonelog
 subtitle: "A Standard Notation for Solo RPG Session Logging"
 author: Roberto Bisceglie
-version: 1.1.0
+version: 1.2.0
 license: CC BY-SA 4.0
 lang: en
 ---
@@ -1879,6 +1879,63 @@ What if the oracle doesn't help?
 
 **Pro tip:** If an oracle result doesn't spark fiction, it's okay to re-frame the question or roll again. The oracle serves your story, not the other way around.
 
+## 10. Add-ons
+
+The five core symbols — `@`, `?`, `d:`, `->`, `=>` — cover the vast majority of solo play. But some games go deeper in specific directions: tactical combat with initiative and damage tracking, dungeon crawling with room states and light management, resource systems where every torch matters. These needs are real, but they're not universal.
+
+That's what add-ons are for.
+
+### 10.1 What Add-ons Are
+
+An add-on is a **standalone extension document** that deepens Lonelog notation for a specific type of play. Each add-on:
+
+- Works with the five core symbols — it extends them, never replaces them
+- Introduces conventions (tags, formats, structural blocks) suited to its domain
+- Functions independently — you read just the add-on you need, not the whole ecosystem
+- Integrates cleanly with other add-ons if you use more than one
+
+Add-ons live in separate files rather than in this document. That's a deliberate choice: a dungeon crawler who never fights in initiative order shouldn't have to scroll past four pages of combat rules. Lonelog's core should stay lean. Add-ons let the system grow without bloating the manual you carry to the table.
+
+Think of the core as a language, and add-ons as domain vocabularies. A linguist and a sailor both speak English, but the sailor has words for things the linguist doesn't need. The words don't conflict — they extend.
+
+### 10.2 Why Separate Files
+
+Three reasons:
+
+**Download only what you need.** On itch.io, in a Markdown vault, or printed and tucked into a notebook — you grab the add-ons that match your current campaign. Running Ironsworn? Grab the resource tracking add-on. Running a dungeon crawl? Add the dungeon add-on. Nothing you don't use.
+
+**Update independently.** If the Combat Add-on refines its initiative notation, that update doesn't touch the core spec. Core and add-ons can evolve at their own pace, stay in sync where they need to, and diverge where they legitimately differ.
+
+**Share and remix freely.** The community can write, publish, and share add-ons without modifying the core document. A player who develops a brilliant notation for hex crawling can release it as a Lonelog add-on. The shared core ensures it's immediately readable to anyone who knows Lonelog.
+
+### 10.3 How to Use Add-ons
+
+**Start with the core.** If you're new to Lonelog, spend at least a session or two with just the five core symbols before layering anything on top. The core handles more than you might expect.
+
+**Add one at a time.** If you're adding a dungeon crawl notation and a resource tracking system in the same campaign, introduce them one session apart. That gives you time to settle each one before combining them.
+
+**Mix and match freely.** Add-ons are designed to coexist. The Combat Add-on and the Dungeon Crawling Add-on, for example, are written to work in the same session log without symbol conflicts.
+
+**When in doubt, skip it.** If an add-on feels like overhead rather than help, don't use it. The core notation is always sufficient. Add-ons serve your play; your play doesn't serve add-ons.
+
+### 10.4 Available Add-ons
+
+The following add-ons are part of the official Lonelog ecosystem:
+
+| Add-on | File | Best For |
+|--------|------|----------|
+| Combat Add-on | `addons/combat.md` | Tactical fights, initiative, HP tracking |
+| Dungeon Crawling Add-on | `addons/dungeon.md` | Room exploration, light, traps, mapping notes |
+| Resource Tracking Add-on | `addons/resources.md` | Inventory, usage dice, wealth, supply |
+
+Community-created add-ons follow the same conventions. See the **Community Add-on Guidelines** for how to write one, and the Lonelog itch.io page for the community library.
+
+### 10.5 A Note for Add-on Authors
+
+If you're writing a Lonelog add-on — for your own use, to share with friends, or to publish — the **Community Add-on Guidelines** and **Add-on Template** are your starting point. They cover the design constraints that keep add-ons compatible with core, the required metadata format, and how to structure examples so they read naturally alongside core Lonelog logs.
+
+The guiding principle: **extend, don't replace.** A Lonelog add-on that invents its own action symbol isn't a Lonelog add-on — it's a fork. The power of the ecosystem comes from shared conventions at the core, with creativity in the extensions.
+
 ## Appendices
 
 ### A. Solo RPG Notation Legend
@@ -2018,6 +2075,7 @@ This notation is inspired by the [Valley Standard](https://alfredvalley.itch.io/
 
 **Version History:**
 
+- v 1.2.0: Added Section 10: Add-ons.
 - v 1.1.0: Clarified the use of the license. Added specifications for inline definitions, filtered option sets and multi-line result blocks in section 4.3.
 - v 1.0.0: Evolved from Solo TTRPG Notation v2.0 by Roberto Bisceglie
 

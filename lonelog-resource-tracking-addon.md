@@ -1,36 +1,40 @@
 ---
-title: "Lonelog: Resource Tracking Module"
+title: "Lonelog: Resource Tracking Add-on"
 subtitle: "Inventory, Supplies, and Wealth Notation"
 author: Roberto Bisceglie
-version: 0.1.0 (Draft)
+version: 1.0.0
 license: CC BY-SA 4.0
 lang: en
-parent: Lonelog v1.0.0
+parent: Lonelog v1.2.0
 requires: Core Notation (§3), Persistent Elements (§4.1), Progress Tracking (§4.2)
 ---
 
-## Resource Tracking Module
+# Resource Tracking Add-on
 
-### Overview
+## Overview
 
-Some games don't care what's in your pack. Others treat every torch, every ration, every last arrow as a decision that matters. This module is for the second kind.
+Some games don't care what's in your pack. Others treat every torch, every ration, every last arrow as a decision that matters. This add-on is for the second kind.
 
 Core Lonelog already handles light resource tracking — you can put `Gear:Flashlight,Notebook` inside a `[PC:]` tag and call it a day. That works fine when resources are flavor. But when your game makes resource management a *mechanic* — when running out of torches in a dungeon means something, when the Usage Die ticking down creates real tension, when you need to know exactly how many silver pieces you have left — you need more structure.
 
-That's what this module provides: a dedicated notation layer for tracking resources as they flow in and out of your game.
+That's what this add-on provides: a dedicated notation layer for tracking resources as they flow in and out of your game.
 
-### What This Module Adds
+If your system handwaves supplies or resolves resource scarcity with a single oracle question, you don't need this add-on. Core Lonelog's `[PC:]` tag with a `Gear:` field is more than enough.
 
-One new tag and three conventions:
+---
+
+### What This Add-on Adds
 
 | Addition | Purpose | Example |
 |----------|---------|---------|
-| `[Inv:]` tag | Track individual items with quantity and properties | `[Inv:Torch\|3]` |
+| `[Inv:Item\|qty\|props]` | Track individual items with quantity and properties | `[Inv:Torch\|3]` |
 | Supply notation | Abstract resource levels inside `[PC:]` | `[PC:Kael\|Supply d8]` |
-| Wealth notation | Currency and trade tracking | `[Wealth:Gold 45\|Silver 12]` |
-| Resource Status Block | Snapshot of current resources at session boundaries | See §RSB |
+| `[Wealth:Currency N]` | Currency and trade tracking | `[Wealth:Gold 45\|Silver 12]` |
+| `--- RESOURCES ---` block | Snapshot of current resources at session boundaries | See §5 |
 
-**No new core symbols.** Everything works with `@`, `d:`, `->`, `=>`, and existing tag syntax.
+**No new core symbols.** This add-on introduces no additions to `@`, `?`, `d:`, `->`, or `=>`.
+
+---
 
 ### Design Principles
 
@@ -38,11 +42,11 @@ One new tag and three conventions:
 
 **Separate what you carry from who you are.** The `[PC:]` tag describes your character — HP, stress, conditions, abstract resources that feel like stats. The `[Inv:]` tag describes your stuff — concrete, countable things that come and go. This separation keeps both tags readable as your campaign grows.
 
-**Record changes at the point of fiction.** Don't maintain a separate inventory spreadsheet that you update silently. Show resources changing *when they change*, inline with the actions and consequences that cause it. Your log should tell the story of your resources, not just their current state.
+**Record changes at the point of fiction.** Don't maintain a separate inventory spreadsheet you update silently. Show resources changing *when they change*, inline with the actions and consequences that cause it. Your log should tell the story of your resources, not just their current state.
 
 ---
 
-### 1. The Inventory Tag: `[Inv:]`
+## 1. The Inventory Tag
 
 The `[Inv:]` tag tracks a specific, concrete item or resource. It's the thing you can pick up, use, drop, trade, or lose.
 
@@ -52,7 +56,13 @@ The `[Inv:]` tag tracks a specific, concrete item or resource. It's the thing yo
 [Inv:Item|quantity|properties]
 ```
 
-**Simple items:**
+**Fields:**
+
+- `Item` — the item name, unique enough to search for in a log
+- `quantity` — a plain number; omit for unique or singular items
+- `properties` — freeform; use for weight, condition, magical status, ammunition type, or anything else your game cares about
+
+**Examples:**
 
 ```
 [Inv:Torch|3]
@@ -70,16 +80,23 @@ The `[Inv:]` tag tracks a specific, concrete item or resource. It's the thing yo
 [Inv:Map to the Ruins]
 ```
 
-The `quantity` field is a plain number. Properties after the quantity are freeform — use them for anything your game cares about: weight, condition, magical status, ammunition type, whatever matters.
-
 #### 1.1 Gaining Items
 
-When you acquire something, introduce it with a full `[Inv:]` tag, just like introducing an NPC with `[N:]`:
+When you acquire something, introduce it with a full `[Inv:]` tag, just as you introduce an NPC with `[N:]`:
+
+**Example — minimal:**
+
+```
+=> I find supplies! [Inv:Torch|4] [Inv:Rope|1|50ft] [Inv:Gold|25]
+```
+
+**Example — expanded:**
 
 ```
 @ Search the chest
 d: Investigation d6=5 vs TN 4 -> Success
-=> I find supplies! [Inv:Torch|4] [Inv:Rope|1|50ft] [Inv:Gold|25]
+=> Inside: torches, rope, some coin.
+[Inv:Torch|4] [Inv:Rope|1|50ft] [Inv:Gold|25]
 
 @ Loot the fallen guard
 => [Inv:Short Sword|1|rusty] [Inv:Rations|2|days]
@@ -88,7 +105,7 @@ tbl: d100=67 -> "A strange amulet"
 => [Inv:Bone Amulet|1|unknown|magical?]
 ```
 
-**Multiple items at once** — just list them. No special syntax needed:
+**Multiple items at once** — list them; no special syntax needed:
 
 ```
 => The merchant's pack contains:
@@ -98,11 +115,11 @@ tbl: d100=67 -> "A strange amulet"
 
 #### 1.2 Consuming and Losing Items
 
-This is where the module stays deliberately flexible. Two approaches, same result — choose what fits your flow.
+Two approaches, same result — choose what fits your flow.
 
 **Approach A: Inline with consequences**
 
-Depletion happens *inside* the `=>` line, as part of the fiction:
+Depletion happens inside the `=>` line, as part of the fiction:
 
 ```
 => The tunnel is pitch dark. I light a torch. [Inv:Torch|3→2]
@@ -127,8 +144,8 @@ Depletion gets its own line, separate from narrative:
 **Shorthand for quantity changes:**
 
 ```
-[Inv:Torch-1]         (consumed one — quantity decreases by 1)
-[Inv:Torch+2]         (found two more — quantity increases by 2)
+[Inv:Torch-1]         (consumed one)
+[Inv:Torch+2]         (found two more)
 [Inv:Torch|0]         (explicit: none left)
 [Inv:Torch|3→1]       (explicit: was 3, now 1)
 [Inv:Torch|depleted]  (out — marks the item as gone)
@@ -192,15 +209,13 @@ For slot-based inventory systems:
 
 ---
 
-### 2. Abstract Supply Tracking
+## 2. Abstract Supply Tracking
 
-Not every game counts individual items. Many modern solo systems use abstract mechanics to represent "how well-supplied are you?" — Usage Dice (Black Hack, Macchiato Monsters), Supply tracks (Ironsworn), or simple levels (well-supplied / running low / desperate).
-
-These feel more like character stats than inventory, so they live in the `[PC:]` tag alongside HP, Stress, and other abstract attributes.
+Not every game counts individual items. Many solo systems use abstract mechanics to represent "how well-supplied are you?"—Usage Dice (Black Hack, Macchiato Monsters), Supply tracks (Ironsworn), or simple qualitative levels. These feel more like character stats than inventory, so they live in the `[PC:]` tag alongside HP, Stress, and other abstract attributes.
 
 #### 2.1 Usage Dice
 
-The Usage Die is a staple of OSR-adjacent solo play. You have a die representing supply level — roll it when you use a resource. On a 1–2, the die steps down. When it steps below d4, the resource is gone.
+The Usage Die is a staple of OSR-adjacent solo play. You have a die representing supply level—roll it when you use a resource. On a 1–2, the die steps down. When it steps below d4, the resource is gone.
 
 **Format:**
 
@@ -210,7 +225,14 @@ The Usage Die is a staple of OSR-adjacent solo play. You have a die representing
 [PC:Kael|Ammo d10]
 ```
 
-**Stepping down:**
+**Example — minimal:**
+
+```
+d: Supply d8=2 -> Step down!
+=> [PC:Kael|Supply d8→d6]
+```
+
+**Example — expanded:**
 
 ```
 @ Make camp, use supplies
@@ -230,16 +252,21 @@ d: Torchlight d4=2 -> Depleted!
 
 #### 2.2 Supply Tracks
 
-Some systems use numbered tracks for supply — similar to progress tracks but counting down as resources are spent.
+Some systems use numbered tracks for supply—similar to progress tracks but counting down as resources are spent.
 
 **Format:**
 
 ```
 [PC:Kael|Supply 5/5]
-[PC:Kael|Momentum 3/10]
 ```
 
-**Spending and recovering:**
+**Example — minimal:**
+
+```
+=> I make camp and eat. [PC:Kael|Supply 5→4]
+```
+
+**Example — expanded:**
 
 ```
 => I make camp and eat. [PC:Kael|Supply 5→4]
@@ -272,9 +299,9 @@ You can define your own levels. These aren't hard-coded — use whatever vocabul
 
 ---
 
-### 3. Wealth and Currency
+## 3. Wealth and Currency
 
-Money behaves differently from gear. You don't usually track each coin as an "item" — you track totals, and those totals change through spending, earning, looting, and trading. This section provides notation for that.
+Money behaves differently from gear. You don't usually track each coin as an "item" — you track totals, and those totals change through spending, earning, looting, and trading.
 
 #### 3.1 The Wealth Tag
 
@@ -288,7 +315,14 @@ For games with concrete currency, use the `[Wealth:]` tag:
 [Wealth:Caps 87]
 ```
 
-**Earning and spending:**
+**Example — minimal:**
+
+```
+=> Good price! [Wealth:Gold+15]
+=> [Wealth:Gold-8] [Inv:Rations|5|days] [Inv:Rope|1|50ft]
+```
+
+**Example — expanded:**
 
 ```
 @ Sell the jeweled dagger to the merchant
@@ -326,7 +360,7 @@ For transactions, record both sides:
 
 ```
 @ Trade the amulet for passage
-=> [Inv:Bone Amulet|depleted] → [Thread:Passage to Northport|Open]
+=> [Inv:Bone Amulet|depleted] -> [Thread:Passage to Northport|Open]
 
 @ Barter rations for information
 => [Inv:Rations-2] The fisherman tells me about the sea caves.
@@ -336,9 +370,9 @@ No special syntax needed — the existing consequence notation handles trades na
 
 ---
 
-### 4. Resource Events
+## 4. Resource Events
 
-Resources interact with the rest of your game. This section shows common patterns — how resources connect to actions, oracle questions, dungeon exploration, and combat.
+Resources interact with the rest of your game. These patterns show how resources connect to actions, oracle questions, and ongoing pressures.
 
 #### 4.1 Resource Checks
 
@@ -375,7 +409,7 @@ Some systems modify oracle likelihood based on resource state. Note it:
 
 #### 4.3 Resources in Combat
 
-When the Combat Module is in use, resource consumption integrates naturally:
+When the Combat Add-on is in use, resource consumption integrates naturally:
 
 ```
 [COMBAT]
@@ -393,10 +427,10 @@ d: Ranged d6=3 vs TN 4 -> Fail
 
 #### 4.4 Resources in Dungeon Crawling
 
-When the Dungeon Crawling Module is in use, resource depletion tracks alongside room exploration:
+When the Dungeon Crawling Add-on is in use, resource depletion tracks alongside room exploration:
 
 ```
-[R:Room4|active|Fungal cavern|exits E:Room5, W:Room2]
+[R:4|active|Fungal cavern|exits E:R5, W:R2]
 
 @ Navigate the cavern carefully
 d: Survival d6=4 vs TN 4 -> Success
@@ -406,16 +440,26 @@ d: Survival d6=4 vs TN 4 -> Success
 @ Search for useful fungi
 tbl: d6=5 -> "Glowing moss — edible"
 => [Inv:Edible Moss|3|restores 1 HP each]
-[R:Room4|cleared|looted]
+[R:4|cleared, looted]
 ```
 
 ---
 
-### 5. The Resource Status Block
+## 5. The Resource Status Block
 
-For long sessions or campaigns where resources matter, a snapshot at session boundaries helps you pick up where you left off — like the Dungeon Status Block in the Dungeon Crawling Module, but for your pack and purse.
+For long sessions or campaigns where resources matter, a snapshot at session boundaries helps you pick up where you left off.
 
 **Format:**
+
+```
+--- RESOURCES ---
+[PC:Name|stats]
+[Wealth:currencies]
+[Inv:items...]
+--- /RESOURCES ---
+```
+
+**Example — digital:**
 
 ```
 --- RESOURCES ---
@@ -432,6 +476,19 @@ For long sessions or campaigns where resources matter, a snapshot at session bou
 --- /RESOURCES ---
 ```
 
+**Example — analog:**
+
+```
+=== RESOURCES ===
+PC:  Kael | HP 12/15 | Supply d6 | Stress 2
+Wealth: Gold 52 | Silver 8
+Inv: Short Sword (sharpened), Shield (cracked)
+     Torch ×2, Rations ×3 days
+     Rope 50ft (frayed), Healing Potion ×1
+     Arrow ×9, Bone Amulet (Ward of the Dead)
+=== /RESOURCES ===
+```
+
 **When to use it:**
 
 - At the **end of a session** to freeze state
@@ -445,35 +502,18 @@ For long sessions or campaigns where resources matter, a snapshot at session bou
 - The session is short and changes are minimal
 - You can reconstruct state easily from the log
 
-**Analog format:**
-
-```
-=== RESOURCES ===
-PC:  Kael | HP 12/15 | Supply d6 | Stress 2
-Wealth: Gold 52 | Silver 8
-Inv: Short Sword (sharpened), Shield (cracked)
-     Torch ×2, Rations ×3 days
-     Rope 50ft (frayed), Healing Potion ×1
-     Arrow ×9, Bone Amulet (Ward of the Dead)
-=== /RESOURCES ===
-```
-
-The analog format is more compact — you'll develop your own shorthand for paper. The important thing is capturing the snapshot, not matching the format exactly.
-
 ---
 
-### 6. Cross-Module Interactions
+## Cross-Add-on Interactions
 
-This module is designed to work alongside the Combat Module and Dungeon Crawling Module. Here's how they fit together.
+| Situation | Add-on(s) Used | Key Tags/Blocks |
+|-----------|---------------|----------------|
+| Dungeon exploration with supply pressure | Dungeon Crawling + Resource Tracking | `[R:]`, `[Inv:]`, `[Timer:]` |
+| Combat with ammunition tracking | Combat + Resource Tracking | `[F:]`, `[COMBAT]`, `[Inv:]` |
+| Trading in a settlement | Resource Tracking only | `[Inv:]`, `[Wealth:]`, `[N:]` |
+| Full dungeon crawl with fights | All three add-ons | `[R:]`, `[COMBAT]`, `[Inv:]`, `[Wealth:]` |
 
-| Situation | Module(s) Used | Key Tags |
-|-----------|---------------|----------|
-| Dungeon exploration with supply pressure | DCM + Resource | `[R:]`, `[Inv:]`, `[Timer:]` |
-| Combat with ammunition tracking | Combat + Resource | `[F:]`, `[Inv:]`, `@(Name)` |
-| Trading in a settlement | Resource only | `[Inv:]`, `[Wealth:]`, `[N:]` |
-| Full dungeon crawl with fights | All three | Everything |
-
-**Example: Full dungeon crawl turn with all three modules**
+**Combined example — all three add-ons:**
 
 ```
 --- RESOURCES ---
@@ -483,7 +523,7 @@ This module is designed to work alongside the Combat Module and Dungeon Crawling
 --- /RESOURCES ---
 
 S5 *Entering the crypt*
-[R:Crypt1|active|Entry hall, bones everywhere|exits N:Crypt2, E:Crypt3]
+[R:1|active|Entry hall, bones everywhere|exits N:R2, E:R3]
 
 @ Light a torch and move in
 [Inv:Torch-1] [Timer:Torchlight 6]
@@ -491,11 +531,12 @@ S5 *Entering the crypt*
 ? Are there enemies?
 -> Yes, and... (d6=6)
 => Skeletons rise from the bone piles!
-[F:Skeleton×3|HP 3 each|Close]
 
 [COMBAT]
+[F:Skeleton×3|HP 3 each|Close]
+
 R1
-@ Fire at nearest skeleton
+@ Fire at the nearest skeleton
 d: Ranged d6=5 vs TN 4 -> Success
 => Arrow shatters its skull! [F:Skeleton×3→2] [Inv:Arrow-1]
 
@@ -504,7 +545,7 @@ d: Attack d6=3 vs TN 4 -> Fail
 => Clumsy swing, I dodge.
 
 R2
-@ Draw sword, attack
+@ Draw sword, press the attack
 d: Melee d6=6 vs TN 4 -> Success
 => Cut clean through! [F:Skeleton×2→1]
 
@@ -518,20 +559,18 @@ tbl: d20=14 -> "A locked chest"
 ? Can I pick the lock?
 d: Lockpicking d6=5 vs TN 5 -> Success
 => Inside: [Inv:Gold Bracelet|1|valuable] [Wealth:Gold+10]
-[R:Crypt1|cleared|looted]
+[R:1|cleared, looted]
 [Timer:Torchlight-1]
 
-@ Move north toward Crypt2
-[R:Crypt2|active|Ritual chamber|exits S:Crypt1, D:CryptDeep]
+@ Move north toward R2
+[R:2|active|Ritual chamber|exits S:R1, D:R3]
 ```
 
 ---
 
-### 7. System Adaptations
+## System Adaptations
 
-Different games handle resources differently. Here's how the module adapts to popular systems.
-
-#### 7.1 The Black Hack / Usage Dice Systems
+### The Black Hack / Usage Dice Systems
 
 Usage Dice are the primary resource mechanic. Track them in `[PC:]`:
 
@@ -544,19 +583,19 @@ d: Rations d6=2 -> Step down!
 (note: one more step-down and they're gone)
 ```
 
-#### 7.2 Ironsworn / Supply Track
+### Ironsworn / Supply Track
 
 Supply is a single stat from 0–5:
 
 ```
 [PC:Kael|Supply 4/5|Health 4/5|Spirit 3/5|Momentum 6/10]
 
-@ Undertake a Journey — Sojourn at the settlement
+@ Sojourn at the settlement
 d: Action=5+Heart=2=7 vs Challenge=3,8 -> Weak Hit
 => I resupply but time passes. [PC:Kael|Supply+2|Momentum-1]
 ```
 
-#### 7.3 OSR / Encumbrance Systems
+### OSR / Encumbrance Systems
 
 Slot-based inventory is common in OSR games:
 
@@ -575,7 +614,7 @@ Slot-based inventory is common in OSR games:
 (note: at 7/10 slots — movement penalty at 8+)
 ```
 
-#### 7.4 Fate / Narrative-First Systems
+### Fate / Narrative-First Systems
 
 Resources are aspects or stress tracks, not inventories:
 
@@ -585,9 +624,9 @@ Resources are aspects or stress tracks, not inventories:
 [PC:Sable|Aspect:Running Low|invoked against me]
 ```
 
-Or simply note it in prose and skip the `[Inv:]` tag entirely. If your game doesn't mechanize resources, neither should your notation.
+Or simply note it in prose and skip `[Inv:]` entirely. If your game doesn't mechanize resources, neither should your notation.
 
-#### 7.5 Survival Horror / Scarcity Games
+### Survival Horror / Scarcity Games
 
 When every bullet counts:
 
@@ -611,13 +650,21 @@ d: Battery d4=1 -> Step down!
 
 ---
 
-### 8. Best Practices
+## Best Practices
 
 **Do: Record resource changes at the point of fiction**
 
 ```
 ✔ @ Light a torch to see
   => The cavern reveals a narrow passage. [Inv:Torch-1]
+```
+
+**Don't: Silently update resources outside the log**
+
+```
+✗ (I subtracted 3 arrows but didn't write it down anywhere)
+
+✔ Show the change, even briefly: [Inv:Arrow-3]
 ```
 
 **Do: Use the Resource Status Block at session boundaries**
@@ -627,22 +674,6 @@ d: Battery d4=1 -> Step down!
   [PC:Kael|HP 12/15|Supply d6]
   [Inv:Torch|2] [Inv:Arrow|9]
   --- /RESOURCES ---
-```
-
-**Do: Match your notation to your system's resource model**
-
-```
-✔ Usage Die game → [PC:|Supply d8]
-✔ Counting game → [Inv:Arrow|12]
-✔ Narrative game → [PC:|Aspect:Well-Provisioned]
-```
-
-**Don't: Track resources the game doesn't care about**
-
-```
-✗ [Inv:Bootlaces|2|leather]     (unless your game literally tracks this)
-
-✔ Only track what creates meaningful decisions or tension
 ```
 
 **Don't: Let bookkeeping overwhelm the fiction**
@@ -655,22 +686,47 @@ d: Battery d4=1 -> Step down!
 
 ✔ => Arrow finds its mark — the orc staggers.
   [Inv:Arrow-1] [F:Orc|HP-4]
-  (Track what matters this beat. Batch updates for the rest in a status block.)
+  (Track what matters this beat. Batch the rest in a status block.)
 ```
 
-**Don't: Silently update resources outside the log**
+**Do: Match your notation to your system's resource model**
 
 ```
-✗ (I subtracted 3 arrows but didn't write it down anywhere)
+✔ Usage Die game:    [PC:Kael|Supply d8]
+✔ Counting game:     [Inv:Arrow|12]
+✔ Narrative game:    [PC:Sable|Aspect:Well-Provisioned]
+```
 
-✔ Show the change, even briefly: [Inv:Arrow-3]
+**Don't: Track resources the game doesn't care about**
+
+```
+✗ [Inv:Bootlaces|2|leather]     (unless your game literally tracks this)
+
+✔ Only track what creates meaningful decisions or tension.
+```
+
+**Do: Separate concrete items from abstract stats**
+
+```
+✔ [Inv:Healing Potion|2]        (concrete, countable item)
+✔ [PC:Kael|Supply d6]           (abstract supply level)
+```
+
+**Don't: Mix the two in the same place for different reasons**
+
+```
+✗ [PC:Kael|HP 12|Torch 3|Arrow 9|Rations 5]
+  (inventory list inside a character stat tag)
+
+✔ [PC:Kael|HP 12|Supply d6]
+  [Inv:Torch|3] [Inv:Arrow|9] [Inv:Rations|5]
 ```
 
 ---
 
-### 9. Quick Reference
+## Quick Reference
 
-#### Tags
+### New Tags
 
 | Tag | Purpose | Example |
 |-----|---------|---------|
@@ -678,12 +734,12 @@ d: Battery d4=1 -> Step down!
 | `[#Inv:Item]` | Reference previously established item | `[#Inv:Bone Amulet]` |
 | `[Inv:Item+N]` / `[Inv:Item-N]` | Quantity change (gain/lose) | `[Inv:Arrow-1]` |
 | `[Inv:Item\|qty→qty]` | Explicit quantity transition | `[Inv:Torch\|3→2]` |
-| `[Inv:Item\|depleted]` | Item fully consumed/gone | `[Inv:Oil Flask\|depleted]` |
+| `[Inv:Item\|depleted]` | Item fully consumed or gone | `[Inv:Oil Flask\|depleted]` |
 | `[Wealth:Currency N]` | Concrete currency total | `[Wealth:Gold 45]` |
 | `[Wealth:Currency+N]` | Currency earned | `[Wealth:Gold+15]` |
 | `[Wealth:Currency-N]` | Currency spent | `[Wealth:Gold-8]` |
 
-#### In `[PC:]` Tags (Abstract Resources)
+### Abstract Resources in `[PC:]`
 
 | Pattern | Purpose | Example |
 |---------|---------|---------|
@@ -691,46 +747,79 @@ d: Battery d4=1 -> Step down!
 | `Supply d8→d6` | Usage Die step-down | `[PC:Kael\|Supply d8→d6]` |
 | `Supply 4/5` | Supply track | `[PC:Kael\|Supply 4/5]` |
 | `Supplies:low` | Qualitative level | `[PC:Kael\|Supplies:low]` |
-| `Wealth d8` | Abstract wealth (Usage Die) | `[PC:Kael\|Wealth d8]` |
+| `Wealth d8` | Abstract wealth as Usage Die | `[PC:Kael\|Wealth d8]` |
 | `Aspect:Running Low` | Narrative resource state | `[PC:Sable\|Aspect:Running Low]` |
 
-#### Resource Status Block
+### Structural Blocks
 
-```
---- RESOURCES ---
-[PC:Name|stats]
-[Wealth:currencies]
-[Inv:items...]
---- /RESOURCES ---
-```
+| Block | Opens When | Closes When |
+|-------|-----------|-------------|
+| `--- RESOURCES ---` | Session start/end, before major expeditions | After all current `[Inv:]` and `[PC:]` tags are listed |
 
-#### Usage Die Step-Down Chain
+### Usage Die Step-Down Chain
 
 ```
 d12 → d10 → d8 → d6 → d4 → depleted
 ```
 
+### Complete Example
+
+```
+--- RESOURCES ---
+[PC:Kael|HP 10/15|Supply d6] [Wealth:Gold 52]
+[Inv:Torch|2] [Inv:Arrow|9] [Inv:Healing Potion|1]
+--- /RESOURCES ---
+
+@ Light a torch
+[Inv:Torch-1] [Timer:Torchlight 6]
+
+@ Fire at the orc
+d: Ranged d6=5 vs TN 4 -> Success
+=> [F:Orc|HP-4] [Inv:Arrow-1]
+
+=> I bandage up after the fight. [Inv:Healing Potion-1] [PC:Kael|HP+5|HP 15]
+```
+
 ---
 
-### FAQ
+## FAQ
 
 **Q: When should I use `[Inv:]` vs. just putting gear in `[PC:]`?**
 A: If resources are mechanically important and change often, use `[Inv:]`. If they're background flavor or you're only tracking one or two things, `[PC:Name|Gear:Sword,Shield]` is fine. There's no wrong answer — use what keeps your log clear.
 
 **Q: Do I need the `[Wealth:]` tag, or can I put money in `[Inv:]`?**
-A: Either works. `[Wealth:]` is cleaner for multi-currency systems (gold/silver/copper) and for tracking money that flows frequently. `[Inv:Gold|45]` works fine for simpler games or if you're already using `[Inv:]` for everything.
+A: Either works. `[Wealth:]` is cleaner for multi-currency systems (gold/silver/copper) and for money that flows frequently. `[Inv:Gold|45]` works fine for simpler games or if you're already using `[Inv:]` for everything.
 
 **Q: Should I write a Resource Status Block every session?**
-A: Only if it helps you. If resources are central to your game (dungeon crawls, survival horror), a block at session start/end saves you from scrolling back. If resources rarely change or aren't mechanically important, skip it.
+A: Only if it helps you. If resources are central to your game (dungeon crawls, survival horror), a block at session start and end saves you from scrolling back. If resources rarely change or aren't mechanically important, skip it.
 
 **Q: What if I'm playing a game with no resource mechanics at all?**
-A: Then you probably don't need this module. Core Lonelog's `[PC:]` tag with a `Gear:` field is more than enough. This module exists for games where resources create tension and decisions.
+A: Then you probably don't need this add-on. Core Lonelog's `[PC:]` tag with a `Gear:` field is more than enough. This add-on exists for games where resources create tension and decisions.
 
-**Q: Can I combine `[Inv:]` with the Dungeon Crawling Module's `[R:]` tags?**
-A: Absolutely — they're designed to work together. Tag loot in the room where you find it: `[R:Room3|looted] [Inv:Gold Ring|1|valuable]`. The `[R:]` tag tracks what happened to the room; the `[Inv:]` tag tracks what happened to the loot.
+**Q: Can I combine `[Inv:]` with the Dungeon Crawling Add-on's `[R:]` tags?**
+A: Absolutely — they're designed to work together. Tag loot in the room where you find it: `[R:3|looted] [Inv:Gold Ring|1|valuable]`. The `[R:]` tag tracks what happened to the room; the `[Inv:]` tag tracks what happened to the loot.
 
 **Q: How do I handle containers, bags of holding, saddlebags?**
 A: Either nest descriptively — `[Inv:Bag of Holding|contains: Wand, Scrolls×3, Gold 100]` — or track the container and contents separately. For slot-based systems, just mark which slots are "in the bag." Don't over-engineer it.
 
 **Q: The `×` symbol is hard to type. Can I use `x` instead?**
 A: Yes. `[Inv:Arrow×12]` and `[Inv:Arrowx12]` are both fine. Readability over formality.
+
+**Q: How does this work in an analog notebook?**
+A: The Resource Status Block works well in analog — write it in a box or across the top of the page. For inline changes, use shorthand in the margin: `Torch -1`, `Arrow 9→8`. The `+`/`-` notation is fast enough that it doesn't slow down handwriting.
+
+---
+
+## Credits & License
+
+© 2025 Roberto Bisceglie
+
+This add-on extends [Lonelog](https://zeruhur.itch.io/lonelog) by Roberto Bisceglie.
+
+**Version History:**
+
+- v 1.0.0: Rewritten as a compliant add-on (previously "Resource Tracking Module")
+
+This work is licensed under the **Creative Commons Attribution-ShareAlike 4.0 International License**.
+
+You are free to share and adapt this material, provided you give appropriate credit and distribute adaptations under the same license. Session logs and play records created using this add-on's notation are your own work and are not subject to this license.
