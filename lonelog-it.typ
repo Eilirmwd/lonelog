@@ -674,7 +674,7 @@
 #show: doc => worldbuilders(
   title: "Lonelog",
   subtitle: "Una notazione standard per registrare le tue sessioni di GDR solitario",
-  version: "1.1.0",
+  version: "1.2.0",
   authors: ("Roberto Bisceglie", ),
   date: none,
   abstract: none,
@@ -1168,6 +1168,65 @@ Il simbolo `#` indica che questo elemento è stato definito in precedenza. Usalo
 - Menzioni successive nella stessa scena: Opzionale, usa il buon senso
 - Menzioni successive in scene/sessioni diverse: Usa `[#N:Nome]` per segnalare il riferimento
 - Cambiamenti di stato: Rimuovi il `#` e mostra i nuovi tag `[N:Nome|nuovi_tag]`
+
+=== 4.1.7 Categorie di Tag
+<categorie-di-tag>
+Quando un tag contiene valori di tipi distinti, raggruppali con prefissi di categoria. Il nome della categoria è seguito da `:` e poi da un elenco separato da virgole di valori che vi appartengono:
+
+```
+[PG:Jonah|tratto:amichevole,curioso|stato:ferito|stat:PF 8]
+[N:Guardia|ruolo:vigile|stato:armata,allerta]
+```
+
+Le categorie sono libere --- usa qualsiasi etichetta fornita dal vocabolario del tuo gioco. Questo è particolarmente utile per i giochi in cui i tag hanno tipi espliciti (come Power Tags e Weakness Tags in City of Mist, o Aspetti e abilità in Fate). I tag semplici senza prefisso di categoria funzionano esattamente come prima:
+
+```
+[N:Jonah|amichevole|ferito]              (semplice — funziona come sempre)
+[N:Jonah|tratto:amichevole|stato:ferito] (categorizzato — stesse informazioni, raggruppate)
+```
+
+=== 4.1.8 Tag Multi-riga
+<tag-multi-riga>
+Per i personaggi con molti tag, la forma a riga singola può diventare difficile da leggere. Spezza un tag su più righe usando lo stesso separatore `|`, con la parentesi di chiusura `]` sulla propria riga:
+
+```
+[PG:Jonah
+  | tratto: amichevole, curioso, spericolato
+  | debolezza: ingenuo, facilmente distratto
+  | stato: ferito
+  | stat: PF 8, Stress 2
+]
+```
+
+La forma multi-riga e quella a riga singola sono equivalenti --- usa quella che risulta più leggibile al livello attuale di complessità. I tag multi-riga funzionano naturalmente all'inizio della sessione (schede del personaggio e blocchi di stato) o ogni volta che lo stato di un personaggio diventa abbastanza complesso da giustificarlo.
+
+#strong[Formato analogico:] Rientra le righe di continuazione e disegna una parentesi di chiusura alla fine dell'ultima riga:
+
+```
+[PG:Jonah
+  tratto: amichevole, curioso | stato: ferito
+  stat: PF 8, Stress 2]
+```
+
+=== 4.1.9 Contesto del Tiro
+<contesto-del-tiro>
+Quando un tiro attinge a tag specifici, tratti o modificatori situazionali --- specialmente in giochi pesanti sui tag come PbtA o City of Mist --- elencali tra parentesi quadre all'interno della riga `d:`:
+
+```
+d: Investigare 2d6 [Gentile con gli altri, Ingenuo] = 8 -> Misto
+d: Furtività d6 [+copertura, -ferito] vs CD 4 -> Fallimento
+d: Persuadere 2d6 [potere: lingua d'argento | contro: sospettoso-2] = 9 -> Colpo Forte
+```
+
+Le parentesi `[...]` all'interno di `d:` significano "questi tag sono #strong[attivi per questo tiro];." Questo è distinto dall'abbreviazione di aggiornamento dei tag `+`/`-` sulle righe di tag autonome (§4.1.1). Il contesto del tiro è temporaneo --- registra quali tag hanno contribuito al tiro senza modificare lo stato persistente del personaggio.
+
+Usa i prefissi di categoria all'interno delle parentesi quando il tuo gioco distingue i tipi di modificatori:
+
+```
+d: Investigare 2d6 [potere: Gentile con gli altri, Ingenuo | contro: riluttante-a-parlare-1] = 8 -> Misto
+```
+
+#strong[Quando usarlo:] Solo quando i tag attivi non sono ovvi dalla riga dell'azione, o quando il tuo sistema richiede di tracciare esplicitamente quali tag hanno contribuito a un tiro. Per la maggior parte dei giochi, la riga dell'azione da sola è sufficiente.
 
 == 4.2 Tracciamento dei Progressi
 <tracciamento-dei-progressi>
@@ -2550,9 +2609,68 @@ Cosa succede se l'oracolo non aiuta?
 => Pericolo, ed è immediato!
 ```
 
-#strong[Pro tip:] Se un risultato dell'oracolo non innesca la finzione, va bene riformulare la domanda o tirare di nuovo. L'oracolo serve la tua storia, non il contrario.
+#strong[Suggerimento:] Se un risultato dell'oracolo non innesca la finzione, va bene riformulare la domanda o tirare di nuovo. L'oracolo serve la tua storia, non il contrario.
 
-#pagebreak()
+= 10. Add-on
+<add-on>
+I cinque simboli principali --- `@`, `?`, `d:`, `->`, `=>` --- coprono la stragrande maggioranza del gioco in solitaria. Ma alcuni giochi vanno più in profondità in direzioni specifiche: combattimento tattico con iniziativa e tracciamento dei danni, dungeon crawling con stati delle stanze e gestione della luce, sistemi di risorse dove ogni torcia conta. Queste esigenze sono reali, ma non sono universali.
+
+A questo servono gli add-on.
+
+== 10.1 Cosa sono gli Add-on
+<cosa-sono-gli-add-on>
+Un add-on è un #strong[documento di estensione autonomo] che approfondisce la notazione Lonelog per un tipo specifico di gioco. Ogni add-on:
+
+- Funziona con i cinque simboli principali --- li estende, non li sostituisce mai
+- Introduce convenzioni (tag, formati, blocchi strutturali) adatte al suo dominio
+- Funziona in modo indipendente --- leggi solo l'add-on di cui hai bisogno, non l'intero ecosistema
+- Si integra perfettamente con altri add-on se ne usi più di uno
+
+Gli add-on risiedono in file separati piuttosto che in questo documento. È una scelta deliberata: un dungeon crawler che non combatte mai in ordine di iniziativa non dovrebbe dover scorrere quattro pagine di regole di combattimento. Il nucleo di Lonelog dovrebbe rimanere snello. Gli add-on permettono al sistema di crescere senza appesantire il manuale che porti al tavolo.
+
+Pensa al nucleo come a una lingua, e agli add-on come a vocabolari di dominio. Un linguista e un marinaio parlano entrambi inglese, ma il marinaio ha parole per cose di cui il linguista non ha bisogno. Le parole non entrano in conflitto --- si estendono.
+
+== 10.2 Perché File Separati
+<perché-file-separati>
+Tre motivi:
+
+#strong[Scarica solo ciò di cui hai bisogno.] Su itch.io, in un vault Markdown, o stampato e inserito in un taccuino --- prendi gli add-on che corrispondono alla tua campagna attuale. Giochi a Ironsworn? Prendi l'add-on per il tracciamento delle risorse. Giochi un dungeon crawl? Aggiungi l'add-on per i dungeon. Niente che non usi.
+
+#strong[Aggiornamento indipendente.] Se l'Add-on Combattimento affina la sua notazione per l'iniziativa, quell'aggiornamento non tocca la specifica principale. Nucleo e add-on possono evolversi al proprio ritmo, rimanere sincronizzati dove necessario e divergere dove legittimamente differiscono.
+
+#strong[Condividi e rimixa liberamente.] La comunità può scrivere, pubblicare e condividere add-on senza modificare il documento principale. Un giocatore che sviluppa una notazione brillante per l'esplorazione esagonale (hex crawling) può rilasciarla come add-on Lonelog. Il nucleo condiviso assicura che sia immediatamente leggibile per chiunque conosca Lonelog.
+
+== 10.3 Come Usare gli Add-on
+<come-usare-gli-add-on>
+#strong[Inizia con il nucleo.] Se sei nuovo a Lonelog, passa almeno una o due sessioni solo con i cinque simboli principali prima di aggiungere altro. Il nucleo gestisce più di quanto potresti aspettarti.
+
+#strong[Aggiungine uno alla volta.] Se stai aggiungendo una notazione per dungeon crawl e un sistema di tracciamento risorse nella stessa campagna, introducili a una sessione di distanza. Questo ti dà il tempo di assimilare ciascuno prima di combinarli.
+
+#strong[Mescola e abbina liberamente.] Gli add-on sono progettati per coesistere. L'Add-on Combattimento e l'Add-on Dungeon Crawling, ad esempio, sono scritti per funzionare nello stesso registro di sessione senza conflitti di simboli.
+
+#strong[Nel dubbio, saltalo.] Se un add-on sembra un sovraccarico piuttosto che un aiuto, non usarlo. La notazione principale è sempre sufficiente. Gli add-on servono il tuo gioco; il tuo gioco non serve gli add-on.
+
+== 10.4 Add-on Disponibili
+<add-on-disponibili>
+I seguenti add-on fanno parte dell'ecosistema ufficiale Lonelog:
+
+#table(
+  columns: (33.33%, 25%, 41.67%),
+  align: (auto,auto,auto,),
+  table.header([Add-on], [File], [Ideale Per],),
+  table.hline(),
+  [Combat Add-on], [`addons/combat.md`], [Combattimenti tattici, iniziativa, tracciamento PF],
+  [Dungeon Crawling Add-on], [`addons/dungeon.md`], [Esplorazione stanze, luce, trappole, note di mappatura],
+  [Resource Tracking Add-on], [`addons/resources.md`], [Inventario, dadi uso, ricchezza, provviste],
+)
+Gli add-on creati dalla comunità seguono le stesse convenzioni. Vedi le #strong[Linee Guida per Add-on della Comunità] per sapere come scriverne uno, e la pagina itch.io di Lonelog per la libreria della comunità.
+
+== 10.5 Una Nota per gli Autori di Add-on
+<una-nota-per-gli-autori-di-add-on>
+Se stai scrivendo un add-on Lonelog --- per uso personale, per condividerlo con amici o per pubblicarlo --- le #strong[Linee Guida per Add-on della Comunità] e il #strong[Template per Add-on] sono il tuo punto di partenza. Coprono i vincoli di design che mantengono gli add-on compatibili con il nucleo, il formato dei metadati richiesto e come strutturare gli esempi in modo che si leggano naturalmente insieme ai registri Lonelog principali.
+
+Il principio guida: #strong[estendi, non sostituire.] Un add-on Lonelog che inventa il proprio simbolo di azione non è un add-on Lonelog --- è un fork. La forza dell'ecosistema deriva dalle convenzioni condivise al centro, con la creatività nelle estensioni.
+
 = Appendici
 <appendici>
 == A. Legenda di Lonelog
@@ -2592,6 +2710,7 @@ Metti un segnalibro a questa sezione. Ci tornerai spesso nelle tue prime session
 - `[E:Nome X/Y]` --- Evento/Orologio
 - `[Thread:Nome|stato]` --- Filo della trama
 - `[PG:Nome|stat]` --- Personaggio del Giocatore
+- `[PC:Nome|categoria:tag,tag]` --- Tag con raggruppamento di categorie (§4.1.7)
 
 === A.4 Tracciamento dei Progressi
 <a.4-tracciamento-dei-progressi>
@@ -2623,6 +2742,30 @@ Metti un segnalibro a questa sezione. Ci tornerai spesso nelle tue prime session
 <a.9-riga-di-esempio-completa>
 ```
 S3 @Scassinare d:15≥14 S => porta si apre silenziosamente [N:Guardia|vigile]
+```
+
+=== A.10 Categorie di Tag, Multi-riga e Contesto del Tiro (v1.3)
+<a.10-categorie-di-tag-multi-riga-e-contesto-del-tiro-v1.3>
+#strong[Sintassi delle categorie:]
+
+```
+[PG:Jonah|tratto:amichevole,curioso|stato:ferito|stat:PF 8]
+```
+
+#strong[Forma multi-riga:]
+
+```
+[PG:Jonah
+  | tratto: amichevole, curioso
+  | stato: ferito
+  | stat: PF 8, Stress 2
+]
+```
+
+#strong[Contesto del tiro all'interno di `d:`:]
+
+```
+d: Investigare 2d6 [potere: Gentile con gli altri, Ingenuo | contro: riluttante-a-parlare-1] = 8 -> Misto
 ```
 
 == B. FAQ
@@ -2703,6 +2846,8 @@ Questa notazione è ispirata al #link("https://alfredvalley.itch.io/the-valley-s
 
 #strong[Cronologia Versioni:]
 
+- v 1.3.0: Aggiunta la sintassi per le categorie di tag (§4.1.7), la forma multi-riga per i tag (§4.1.8) e i blocchi di contesto del tiro all'interno di `d:` (§3.2.1).
+- v 1.2.0: Aggiunta la Sezione 10: Add-on.
 - v 1.1.0: Chiarito l'uso della licenza. Aggiunte specifiche per: definizioni inline, set di opzioni filtrate e blocchi di risultati multi-riga nella sezione 4.3.
 - v 1.0.0: Evoluto da Notazione per GDR Solitario v2.0 di Roberto Bisceglie
 

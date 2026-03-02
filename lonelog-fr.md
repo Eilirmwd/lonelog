@@ -2,7 +2,7 @@
 title: Lonelog
 subtitle: "Une notation standardisée pour la prise de note de session JDR solo"
 author: Roberto Bisceglie
-version: 1.1.0
+version: 1.3.0
 license: CC BY-SA 4.0
 lang: fr
 ---
@@ -248,6 +248,7 @@ Le préfixe `d:` indique une résolution par jet de mécanique ou par règle. In
 ```
 d: d20+Crochetage=17 vs DC 15 -> Succès
 d: 2d6=8 vs ND 7 -> Succès
+d: d100=42 -> Succès partiel (en utilisant une table de résultats)
 d: Pirater le terminal (dépenser 1 Équipement) -> Succès
 ```
 
@@ -486,6 +487,65 @@ Le `#` vous indique que cet élément a été défini plus tôt. Utilisez-le pou
 - Mentions ultérieures dans des scènes/sessions différentes : Utilisez `[#N:Nom]` pour signaler la référence
 - Changements de statut : Laissez tomber le `#` et montrez les nouvelles balises `[N:Nom|nouvelles_balises]`
 
+#### 4.1.7 Catégories de Balises
+
+Lorsqu'une balise contient des valeurs de types distincts, groupez-les avec des préfixes de catégorie. Le nom de la catégorie est suivi de `:` puis d'une liste de valeurs séparées par des virgules :
+
+```
+[PJ:Jonah|trait:amical,curieux|statut:blessé|stat:PV 8]
+[N:Garde|rôle:vigilant|statut:armé,alerte]
+```
+
+Les catégories sont libres — utilisez les étiquettes fournies par le vocabulaire de votre jeu. C'est particulièrement utile pour les jeux où les balises ont des types explicites (comme les Power Tags et Weakness Tags dans City of Mist, ou les Aspects et compétences dans Fate). Les balises simples sans préfixe de catégorie fonctionnent exactement comme avant :
+
+```
+[N:Jonah|amical|blessé]                       (simple — fonctionne comme toujours)
+[N:Jonah|trait:amical|statut:blessé]          (catégorisé — même information, groupée)
+```
+
+#### 4.1.8 Balises Multilignes
+
+Pour les personnages ayant de nombreuses balises, la forme sur une seule ligne peut devenir difficile à lire. Coupez une balise sur plusieurs lignes en utilisant le même séparateur `|`, avec le crochet de fermeture `]` sur sa propre ligne :
+
+```
+[PJ:Jonah
+  | trait: amical, curieux, téméraire
+  | faiblesse: naïf, facilement distrait
+  | statut: blessé
+  | stat: PV 8, Stress 2
+]
+```
+
+Les formes multilignes et sur une seule ligne sont équivalentes — utilisez celle qui est la plus lisible selon le niveau de complexité actuel. Les balises multilignes fonctionnent naturellement au début de la session (feuilles de personnage et blocs de statut) ou chaque fois que l'état d'un personnage devient assez complexe pour le justifier.
+
+**Format analogique :** Indentez les lignes de continuation et dessinez un crochet de fermeture à la fin de la dernière ligne :
+
+```
+[PJ:Jonah
+  trait: amical, curieux | statut: blessé
+  stat: PV 8, Stress 2]
+```
+
+#### 4.1.9 Contexte de Jet
+
+Lorsqu'un jet s'appuie sur des balises, traits ou modificateurs situationnels spécifiques — particulièrement dans les jeux riches en balises comme PbtA ou City of Mist — listez-les entre crochets à l'intérieur de la ligne `d:` :
+
+```
+d: Enquêter 2d6 [Être gentil avec les autres, Naïf] = 8 -> Partiel
+d: Discrétion d6 [+couverture, -blessé] vs ND 4 -> Échec
+d: Persuader 2d6 [pouvoir: beau parleur | contre: méfiant-2] = 9 -> Succès Fort
+```
+
+Le `[...]` à l'intérieur de `d:` signifie "ces balises sont **actives pour ce jet**". C'est distinct du raccourci de mise à jour de balise `+`/`-` sur les lignes de balises autonomes (§4.1.1). Le contexte de jet est temporaire — il enregistre quelles balises ont contribué au jet sans modifier l'état persistant du personnage.
+
+Utilisez des préfixes de catégorie à l'intérieur des crochets lorsque votre jeu distingue les types de modificateurs :
+
+```
+d: Enquêter 2d6 [pouvoir: Être gentil avec les autres, Naïf | contre: réticent-à-parler-1] = 8 -> Partiel
+```
+
+**Quand l'utiliser :** Uniquement lorsque les balises actives ne sont pas évidentes d'après la ligne d'action, ou lorsque votre système exige de suivre explicitement quelles balises ont contribué à un jet. Pour la plupart des jeux, la ligne d'action seule est suffisante.
+
 ### 4.2 Suivi de la Progression
 
 Certaines choses dans votre campagne ne se produisent pas d'un coup — elles se construisent avec le temps. Le rituel prend douze étapes à compléter. La méfiance des gardes grandit à chaque bruit que vous faites. Votre plan d'évasion avance petit à petit. La réserve d'air diminue.
@@ -613,6 +673,8 @@ Pour les tables plus longues, vous pouvez les définir une seule fois au début 
 tbl: Rencontre en forêt d6=5 -> Voyageur sur la route
 ```
 
+Si la table a été définie plus tôt dans le journal, les lecteurs peuvent revenir en arrière pour la trouver. S'il s'agit d'une table publiée, le nom et le type de dé fournissent suffisamment de contexte pour localiser la source.
+
 #### 4.3.2 Ensembles d'options filtrés
 
 Certains jeux n'utilisent pas de tables numérotées — ils utilisent des listes curatées dans lesquelles vous choisissez ou tirez. Vous pouvez filtrer un ensemble plus large d'options pour ne garder que celles pertinentes pour votre scène, puis sélectionner de manière aléatoire ou intuitive.
@@ -645,6 +707,17 @@ tbl: Thème [Trahison, Rédemption, Sacrifice, Secrets]
 tbl: Thème -> Sacrifice
 => La scène sera centrée sur ce que quelqu'un est prêt à abandonner.
 ```
+
+**Filtrage dynamique en milieu de session :**
+
+```
+tbl: Pistes disponibles [Le tuyau du docker, La lettre déchirée, La pièce verrouillée]
+tbl: Pistes disponibles -> La lettre déchirée
+=> Je poursuis la piste de la lettre trouvée lors de la Session 2.
+[Fil:Lettre Déchirée|Ouvert]
+```
+
+La principale différence par rapport aux tables numérotées : les ensembles filtrés capturent *ce qui était disponible*, et pas seulement ce qui a été choisi. C'est particulièrement précieux lorsque vous partagez des journaux — les lecteurs voient les chemins non empruntés à côté de celui que vous avez choisi.
 
 #### 4.3.3 Blocs de résultats multilignes
 
@@ -680,6 +753,29 @@ gen: Ruine (tables d6 maison)
   Secret: d6=6 -> Passage caché sous les décombres
 => [L:Vieille tour de guet|effondrée|inquiétante|passage caché]
 ```
+
+**Avec des définitions de tables en ligne** — vous pouvez combiner ces fonctionnalités. Définissez les axes, puis lancez les dés :
+
+```
+tbl: Rôle PNJ (d6) [Garde, Marchand, Érudit, Mendiant, Noble, Prêtre]
+tbl: Trait PNJ (d6) [Nerveux, Secret, Bruyant, Froid, Gentil, Obsessionnel]
+tbl: Envie PNJ (d6) [S'échapper, Vengeance, Richesse, Connaissance, Pouvoir, Paix]
+
+gen: PNJ
+  Rôle: d6=2 -> Marchand
+  Trait: d6=6 -> Obsessionnel
+  Envie: d6=4 -> Connaissance
+=> [N:Le Collectionneur|marchand|obsessionnel|cherche des textes interdits]
+```
+
+**Format minimal** — lorsque vous avez juste besoin du résultat :
+
+```
+gen: PNJ -> Marchand / Secret / S'échapper
+=> [N:Marchand anonyme|secret|veut fuir]
+```
+
+Utilisez le format multiligne étendu lorsque vous souhaitez montrer votre travail — particulièrement utile dans les journaux partagés, pour les générateurs que vous avez créés vous-même, ou lorsque vous souhaitez retracer comment la fiction a émergé de la mécanique. Utilisez le format minimal sur une seule ligne lorsque la vitesse l'emporte sur le processus.
 
 ### 4.4 Extraits Narratifs
 
@@ -906,6 +1002,7 @@ S2 *Devant la taverne, nuit*
 ? Est-ce que je rencontre quelque chose en chemin ?
 -> Oui, mais... (d6=3)
 => Je vois une silhouette sombre, mais elle ne semble pas hostile.
+[N:Inconnu|mystérieux|regarde]
 ```
 
 #### 5.3.2 Flashbacks
@@ -1690,7 +1787,7 @@ Ces exemples montrent le modèle : enregistrez ce que vous avez lancé, comparez
 #### 9.1.1 Powered by the Apocalypse (PbtA)
 
 ```
-d: 2d6=9 -> Succès complet (10+)
+d: 2d6=9 -> Succès total (10+)
 d: 2d6=7 -> Succès partiel (7-9)
 d: 2d6=4 -> Échec (6-)
 ```
@@ -1844,6 +1941,63 @@ Et si l'oracle n'aide pas ?
 
 **Conseil de pro :** Si un résultat d'oracle ne suscite pas de fiction, il est acceptable de reformuler la question ou de relancer. L'oracle sert votre histoire, pas l'inverse.
 
+## 10. Add-ons
+
+Les cinq symboles de base — `@`, `?`, `d:`, `->`, `=>` — couvrent la grande majorité du jeu en solo. Mais certains jeux vont plus loin dans des directions spécifiques : combat tactique avec initiative et suivi des dégâts, exploration de donjons avec états de pièces et gestion de la lumière, systèmes de ressources où chaque torche compte. Ces besoins sont réels, mais ils ne sont pas universels.
+
+C'est là qu'interviennent les add-ons.
+
+### 10.1 Ce que sont les Add-ons
+
+Un add-on est un **document d'extension autonome** qui approfondit la notation Lonelog pour un type de jeu spécifique. Chaque add-on :
+
+- Fonctionne avec les cinq symboles de base — il les étend, ne les remplace jamais
+- Introduit des conventions (balises, formats, blocs structurels) adaptées à son domaine
+- Fonctionne de manière indépendante — vous ne lisez que l'add-on dont vous avez besoin, pas tout l'écosystème
+- S'intègre proprement aux autres add-ons si vous en utilisez plusieurs
+
+Les add-ons vivent dans des fichiers séparés plutôt que dans ce document. C'est un choix délibéré : un explorateur de donjons qui ne combat jamais dans l'ordre d'initiative ne devrait pas avoir à faire défiler quatre pages de règles de combat. Le cœur de Lonelog doit rester léger. Les add-ons permettent au système de se développer sans alourdir le manuel que vous emportez à table.
+
+Pensez au cœur comme à une langue, et aux add-ons comme à des vocabulaires spécialisés. Un linguiste et un marin parlent tous deux français, mais le marin a des mots pour des choses dont le linguiste n'a pas besoin. Les mots ne sont pas en conflit — ils se complètent.
+
+### 10.2 Pourquoi des fichiers séparés
+
+Trois raisons :
+
+**Ne téléchargez que ce dont vous avez besoin.** Sur itch.io, dans un coffre Markdown ou imprimé et glissé dans un carnet — vous prenez les add-ons qui correspondent à votre campagne actuelle. Vous jouez à Ironsworn ? Prenez l'add-on de suivi des ressources. Vous explorez un donjon ? Ajoutez l'add-on de donjon. Rien que vous n'utilisiez pas.
+
+**Mise à jour indépendante.** Si l'Add-on de Combat affine sa notation d'initiative, cette mise à jour ne touche pas à la spécification de base. Le cœur et les add-ons peuvent évoluer à leur propre rythme, rester synchronisés là où c'est nécessaire et diverger là où ils diffèrent légitimement.
+
+**Partage et remixage libres.** La communauté peut écrire, publier et partager des add-ons sans modifier le document de base. Un joueur qui développe une notation brillante pour l'exploration d'hexagones peut la publier en tant qu'add-on Lonelog. Le cœur partagé garantit qu'il sera immédiatement lisible par quiconque connaît Lonelog.
+
+### 10.3 Comment utiliser les Add-ons
+
+**Commencez par le cœur.** Si vous découvrez Lonelog, passez au moins une session ou deux avec seulement les cinq symboles de base avant d'ajouter quoi que ce soit. Le cœur gère plus de choses que vous ne pourriez le penser.
+
+**Ajoutez-en un à la fois.** Si vous ajoutez une notation d'exploration de donjon et un système de suivi des ressources dans la même campagne, introduisez-les à une session d'intervalle. Cela vous donne le temps d'assimiler chacun d'eux avant de les combiner.
+
+**Mélangez et assortissez librement.** Les add-ons sont conçus pour coexister. L'Add-on de Combat et l'Add-on d'Exploration de Donjon, par exemple, sont écrits pour fonctionner dans le même journal de session sans conflit de symboles.
+
+**En cas de doute, ne l'utilisez pas.** Si un add-on ressemble plus à une contrainte qu'à une aide, ne l'utilisez pas. La notation de base est toujours suffisante. Les add-ons servent votre jeu ; votre jeu ne sert pas les add-ons.
+
+### 10.4 Add-ons Disponibles
+
+Les add-ons suivants font partie de l'écosystème officiel de Lonelog :
+
+| Add-on | Fichier | Idéal pour |
+|--------|---------|-----------|
+| Combat Add-on | `addons/combat.md` | Combats tactiques, initiative, suivi des PV |
+| Dungeon Crawling Add-on | `addons/dungeon.md` | Exploration de pièces, lumière, pièges, notes cartographiques |
+| Resource Tracking Add-on | `addons/resources.md` | Inventaire, dés d'usage, richesse, approvisionnement |
+
+Les add-ons créés par la communauté suivent les mêmes conventions. Voir les **Directives pour les Add-ons de la Communauté** pour savoir comment en écrire un, et la page itch.io de Lonelog pour la bibliothèque de la communauté.
+
+### 10.5 Une note pour les auteurs d'Add-ons
+
+Si vous écrivez un add-on Lonelog — pour votre propre usage, pour le partager avec des amis ou pour le publier — les **Directives pour les Add-ons de la Communauté** et le **Modèle d'Add-on** sont votre point de départ. Ils couvrent les contraintes de conception qui maintiennent la compatibilité des add-ons avec le cœur, le format de métadonnées requis et la structure des exemples pour qu'ils se lisent naturellement aux côtés des journaux Lonelog classiques.
+
+Le principe directeur : **étendre, ne pas remplacer.** Un add-on Lonelog qui invente son propre symbole d'action n'est pas un add-on Lonelog — c'est un fork. La puissance de l'écosystème provient des conventions partagées au cœur, avec la créativité dans les extensions.
+
 ## Annexes
 
 ### A. Légende de la Notation de JDR Solo
@@ -1880,6 +2034,7 @@ Mettez cette section en favori. Vous y reviendrez souvent lors de vos premières
 - `[E:Nom X/Y]` — Événement/Horloge
 - `[Fil:Nom|état]` — Fil conducteur de l'histoire
 - `[PJ:Nom|stats]` — Personnage joueur
+- `[PJ:Nom|catégorie:balise,balise]` — Balise avec regroupement par catégorie (§4.1.7)
 
 #### A.4 Suivi de la Progression
 
@@ -1911,6 +2066,30 @@ Mettez cette section en favori. Vous y reviendrez souvent lors de vos premières
 
 ```
 S3 @Crocheter serrure d:15≥14 S => porte s'ouvre silencieusement [N:Garde|alerte]
+```
+
+#### A.10 Catégories de Balises, Multilignes et Contexte de Jet (v1.3)
+
+**Syntaxe de catégorie :**
+
+```
+[PJ:Jonah|trait:amical,curieux|statut:blessé|stat:PV 8]
+```
+
+**Forme multiligne :**
+
+```
+[PJ:Jonah
+  | trait: amical, curieux
+  | statut: blessé
+  | stat: PV 8, Stress 2
+]
+```
+
+**Contexte de jet à l'intérieur de `d:` :**
+
+```
+d: Enquêter 2d6 [pouvoir: Être gentil avec les autres, Naïf | contre: réticent-à-parler-1] = 8 -> Partiel
 ```
 
 ### B. FAQ
@@ -1980,7 +2159,10 @@ Cette notation est inspirée de la [Valley Standard](https://alfredvalley.itch.i
 
 **Historique des versions :**
 
-- v 1.1.0 : Évolué à partir de Lonelog v1.0 par Roberto Bisceglie
+- v 1.3.0 : Ajout de la syntaxe des catégories de balises (§4.1.7), de la forme de balise multiligne (§4.1.8) et des blocs de contexte de jet à l'intérieur de `d:` (§3.2.1).
+- v 1.2.0 : Ajout de la Section 10 : Add-ons.
+- v 1.1.0 : Clarification de l'utilisation de la licence. Ajout des spécifications pour les définitions en ligne, les ensembles d'options filtrés et les blocs de résultats multilignes dans la section 4.3.
+- v 1.0.0 : Évolué à partir de Solo TTRPG Notation v2.0 par Roberto Bisceglie
 
 Ce travail est sous licence **Creative Commons Attribution-ShareAlike 4.0 International**.
 

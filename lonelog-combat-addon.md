@@ -5,7 +5,7 @@ author: Roberto Bisceglie
 version: 1.0.0
 license: CC BY-SA 4.0
 lang: en
-parent: Lonelog v1.2.0
+parent: Lonelog v1.3.0
 requires: Core Notation (§3)
 ---
 
@@ -290,6 +290,18 @@ R1
 [PC] @ Riposte -> d:18≥12 Hit => [F:Thug A|HP-6|dead]
 [F:Thug B|Close] @(B) Stab -> d:11≥15 Miss
 ```
+
+**Roll context:** When a combatant's tags or status directly affect the mechanics of a roll, note them inline using roll context (core Lonelog §4.1.9):
+
+```
+@(Pirate Captain) Presses the attack
+d: d20+6 [against: staggered] = 11 vs AC 14 -> Miss
+
+@ Strike at the weakened Captain
+d: d20+5 [+flanking, +high ground] = 18 vs AC 13 -> Hit
+```
+
+This is most useful in tag-heavy systems (City of Mist, Fate) where named tags mechanically modify rolls. In traditional d20 systems, the roll line alone is usually sufficient.
 
 ---
 

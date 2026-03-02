@@ -2,7 +2,7 @@
 title: Lonelog
 subtitle: "A Standard Notation for Solo RPG Session Logging"
 author: Roberto Bisceglie
-version: 1.2.0
+version: 1.3.0
 license: CC BY-SA 4.0
 lang: en
 ---
@@ -482,6 +482,65 @@ The `#` tells you this element was defined earlier. Use it to:
 - Later mentions in same scene: Optional, use judgment
 - Later mentions in different scenes/sessions: Use `[#N:Name]` to signal reference
 - Status changes: Drop the `#` and show new tags `[N:Name|new_tags]`
+
+#### 4.1.7 Tag Categories
+
+When a tag holds values across distinct types, group them with category prefixes. The category name is followed by `:` and then a comma-separated list of values that belong to it:
+
+```
+[PC:Jonah|trait:friendly,curious|status:wounded|stat:HP 8]
+[N:Guard|role:watchful|status:armed,alert]
+```
+
+Categories are freeform — use whatever labels your game's vocabulary provides. This is especially useful for games where tags have explicit types (like Power Tags and Weakness Tags in City of Mist, or Aspects and skills in Fate). Plain tags without a category prefix work exactly as before:
+
+```
+[N:Jonah|friendly|injured]               (plain — works as always)
+[N:Jonah|trait:friendly|status:injured]  (categorized — same information, grouped)
+```
+
+#### 4.1.8 Multi-Line Tags
+
+For characters with many tags, the single-line form can become hard to read. Break a tag across lines using the same `|` separator, with the closing `]` on its own line:
+
+```
+[PC:Jonah
+  | trait: friendly, curious, reckless
+  | weakness: naive, easily distracted
+  | status: wounded
+  | stat: HP 8, Stress 2
+]
+```
+
+Multi-line and single-line form are equivalent — use whichever is readable at the current level of complexity. Multi-line tags work naturally at session start (character sheets and status blocks) or whenever a character's state becomes complex enough to warrant it.
+
+**Analog format:** Indent the continuation lines and draw a closing bracket at the end of the last line:
+
+```
+[PC:Jonah
+  trait: friendly, curious | status: wounded
+  stat: HP 8, Stress 2]
+```
+
+#### 4.1.9 Roll Context
+
+When a roll draws on specific tags, traits, or situational modifiers — especially in tag-heavy games like PbtA or City of Mist — list them inside square brackets within the `d:` line:
+
+```
+d: Investigate 2d6 [Be kind to others, Naive] = 8 -> Mixed
+d: Stealth d6 [+cover, -injured] vs TN 4 -> Fail
+d: Persuade 2d6 [power: silver tongue | against: suspicious-2] = 9 -> Strong Hit
+```
+
+The `[...]` inside `d:` means "these tags are **active for this roll**." This is distinct from the `+`/`-` tag update shorthand on standalone tag lines (§4.1.1). Roll context is temporary — it records which tags contributed to the roll without changing the character's persistent state.
+
+Use category prefixes inside the brackets when your game distinguishes types of modifiers:
+
+```
+d: Investigate 2d6 [power: Be kind to others, Naive | against: reluctant-to-talk-1] = 8 -> Mixed
+```
+
+**When to use:** Only when the active tags aren't obvious from the action line, or when your system requires explicitly tracking which tags contributed to a roll. For most games, the action line alone is sufficient.
 
 ### 4.2 Progress Tracking
 
@@ -1972,6 +2031,7 @@ Bookmark this section. You'll come back to it often in your first few sessions, 
 - `[E:Name X/Y]` — Event/Clock
 - `[Thread:Name|state]` — Story thread
 - `[PC:Name|stats]` — Player character
+- `[PC:Name|category:tag,tag]` — Tag with category grouping (§4.1.7)
 
 #### A.4 Progress Tracking
 
@@ -2003,6 +2063,30 @@ Bookmark this section. You'll come back to it often in your first few sessions, 
 
 ```
 S3 @Pick lock d:15≥14 S => door opens quietly [N:Guard|alert]
+```
+
+#### A.10 Tag Categories, Multi-line, and Roll Context (v1.3)
+
+**Category syntax:**
+
+```
+[PC:Jonah|trait:friendly,curious|status:wounded|stat:HP 8]
+```
+
+**Multi-line form:**
+
+```
+[PC:Jonah
+  | trait: friendly, curious
+  | status: wounded
+  | stat: HP 8, Stress 2
+]
+```
+
+**Roll context inside `d:`:**
+
+```
+d: Investigate 2d6 [power: Be kind to others, Naive | against: reluctant-to-talk-1] = 8 -> Mixed
 ```
 
 ## B. FAQ
@@ -2075,6 +2159,7 @@ This notation is inspired by the [Valley Standard](https://alfredvalley.itch.io/
 
 **Version History:**
 
+- v 1.3.0: Added tag category syntax (§4.1.7), multi-line tag form (§4.1.8), and roll context blocks inside `d:` (§3.2.1).
 - v 1.2.0: Added Section 10: Add-ons.
 - v 1.1.0: Clarified the use of the license. Added specifications for inline definitions, filtered option sets and multi-line result blocks in section 4.3.
 - v 1.0.0: Evolved from Solo TTRPG Notation v2.0 by Roberto Bisceglie

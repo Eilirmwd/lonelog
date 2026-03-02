@@ -506,6 +506,65 @@ Il simbolo `#` indica che questo elemento è stato definito in precedenza. Usalo
 * Menzioni successive in scene/sessioni diverse: Usa `[#N:Nome]` per segnalare il riferimento
 * Cambiamenti di stato: Rimuovi il `#` e mostra i nuovi tag `[N:Nome|nuovi_tag]`
 
+#### 4.1.7 Categorie di Tag
+
+Quando un tag contiene valori di tipi distinti, raggruppali con prefissi di categoria. Il nome della categoria è seguito da `:` e poi da un elenco separato da virgole di valori che vi appartengono:
+
+```
+[PG:Jonah|tratto:amichevole,curioso|stato:ferito|stat:PF 8]
+[N:Guardia|ruolo:vigile|stato:armata,allerta]
+```
+
+Le categorie sono libere — usa qualsiasi etichetta fornita dal vocabolario del tuo gioco. Questo è particolarmente utile per i giochi in cui i tag hanno tipi espliciti (come Power Tags e Weakness Tags in City of Mist, o Aspetti e abilità in Fate). I tag semplici senza prefisso di categoria funzionano esattamente come prima:
+
+```
+[N:Jonah|amichevole|ferito]              (semplice — funziona come sempre)
+[N:Jonah|tratto:amichevole|stato:ferito] (categorizzato — stesse informazioni, raggruppate)
+```
+
+#### 4.1.8 Tag Multi-riga
+
+Per i personaggi con molti tag, la forma a riga singola può diventare difficile da leggere. Spezza un tag su più righe usando lo stesso separatore `|`, con la parentesi di chiusura `]` sulla propria riga:
+
+```
+[PG:Jonah
+  | tratto: amichevole, curioso, spericolato
+  | debolezza: ingenuo, facilmente distratto
+  | stato: ferito
+  | stat: PF 8, Stress 2
+]
+```
+
+La forma multi-riga e quella a riga singola sono equivalenti — usa quella che risulta più leggibile al livello attuale di complessità. I tag multi-riga funzionano naturalmente all'inizio della sessione (schede del personaggio e blocchi di stato) o ogni volta che lo stato di un personaggio diventa abbastanza complesso da giustificarlo.
+
+**Formato analogico:** Rientra le righe di continuazione e disegna una parentesi di chiusura alla fine dell'ultima riga:
+
+```
+[PG:Jonah
+  tratto: amichevole, curioso | stato: ferito
+  stat: PF 8, Stress 2]
+```
+
+#### 4.1.9 Contesto del Tiro
+
+Quando un tiro attinge a tag specifici, tratti o modificatori situazionali — specialmente in giochi pesanti sui tag come PbtA o City of Mist — elencali tra parentesi quadre all'interno della riga `d:`:
+
+```
+d: Investigare 2d6 [Gentile con gli altri, Ingenuo] = 8 -> Misto
+d: Furtività d6 [+copertura, -ferito] vs CD 4 -> Fallimento
+d: Persuadere 2d6 [potere: lingua d'argento | contro: sospettoso-2] = 9 -> Colpo Forte
+```
+
+Le parentesi `[...]` all'interno di `d:` significano "questi tag sono **attivi per questo tiro**." Questo è distinto dall'abbreviazione di aggiornamento dei tag `+`/`-` sulle righe di tag autonome (§4.1.1). Il contesto del tiro è temporaneo — registra quali tag hanno contribuito al tiro senza modificare lo stato persistente del personaggio.
+
+Usa i prefissi di categoria all'interno delle parentesi quando il tuo gioco distingue i tipi di modificatori:
+
+```
+d: Investigare 2d6 [potere: Gentile con gli altri, Ingenuo | contro: riluttante-a-parlare-1] = 8 -> Misto
+```
+
+**Quando usarlo:** Solo quando i tag attivi non sono ovvi dalla riga dell'azione, o quando il tuo sistema richiede di tracciare esplicitamente quali tag hanno contribuito a un tiro. Per la maggior parte dei giochi, la riga dell'azione da sola è sufficiente.
+
 ### 4.2 Tracciamento dei Progressi
 
 Alcune cose nella tua campagna non accadono tutto in una volta—si accumulano nel tempo. Il rituale richiede dodici passi per essere completato. Il sospetto delle guardie cresce a ogni rumore che fai. Il tuo piano di fuga avanza lentamente. La riserva d'aria diminuisce.
@@ -2069,6 +2128,7 @@ Metti un segnalibro a questa sezione. Ci tornerai spesso nelle tue prime session
 * `[E:Nome X/Y]` — Evento/Orologio
 * `[Thread:Nome|stato]` — Filo della trama
 * `[PG:Nome|stat]` — Personaggio del Giocatore
+* `[PC:Nome|categoria:tag,tag]` — Tag con raggruppamento di categorie (§4.1.7)
 
 #### A.4 Tracciamento dei Progressi
 
@@ -2101,6 +2161,30 @@ Metti un segnalibro a questa sezione. Ci tornerai spesso nelle tue prime session
 ```
 S3 @Scassinare d:15≥14 S => porta si apre silenziosamente [N:Guardia|vigile]
 
+```
+
+#### A.10 Categorie di Tag, Multi-riga e Contesto del Tiro (v1.3)
+
+**Sintassi delle categorie:**
+
+```
+[PG:Jonah|tratto:amichevole,curioso|stato:ferito|stat:PF 8]
+```
+
+**Forma multi-riga:**
+
+```
+[PG:Jonah
+  | tratto: amichevole, curioso
+  | stato: ferito
+  | stat: PF 8, Stress 2
+]
+```
+
+**Contesto del tiro all'interno di `d:`:**
+
+```
+d: Investigare 2d6 [potere: Gentile con gli altri, Ingenuo | contro: riluttante-a-parlare-1] = 8 -> Misto
 ```
 
 ### B. FAQ
@@ -2182,6 +2266,7 @@ Questa notazione è ispirata al [Valley Standard](https://alfredvalley.itch.io/t
 
 **Cronologia Versioni:**
 
+* v 1.3.0: Aggiunta la sintassi per le categorie di tag (§4.1.7), la forma multi-riga per i tag (§4.1.8) e i blocchi di contesto del tiro all'interno di `d:` (§3.2.1).
 * v 1.2.0: Aggiunta la Sezione 10: Add-on.
 * v 1.1.0: Chiarito l'uso della licenza. Aggiunte specifiche per: definizioni inline, set di opzioni filtrate e blocchi di risultati multi-riga nella sezione 4.3.
 * v 1.0.0: Evoluto da Notazione per GDR Solitario v2.0 di Roberto Bisceglie

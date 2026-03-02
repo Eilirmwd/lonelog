@@ -674,7 +674,7 @@
 #show: doc => worldbuilders(
   title: "Lonelog",
   subtitle: "A Standard Notation for Solo RPG Session Logging",
-  version: "1.1.0",
+  version: "1.3.0",
   authors: ("Roberto Bisceglie", ),
   date: none,
   abstract: none,
@@ -1170,6 +1170,65 @@ The `#` tells you this element was defined earlier. Use it to:
 - Later mentions in same scene: Optional, use judgment
 - Later mentions in different scenes/sessions: Use `[#N:Name]` to signal reference
 - Status changes: Drop the `#` and show new tags `[N:Name|new_tags]`
+
+=== 4.1.7 Tag Categories
+<tag-categories>
+When a tag holds values across distinct types, group them with category prefixes. The category name is followed by `:` and then a comma-separated list of values that belong to it:
+
+```
+[PC:Jonah|trait:friendly,curious|status:wounded|stat:HP 8]
+[N:Guard|role:watchful|status:armed,alert]
+```
+
+Categories are freeform --- use whatever labels your game's vocabulary provides. This is especially useful for games where tags have explicit types (like Power Tags and Weakness Tags in City of Mist, or Aspects and skills in Fate). Plain tags without a category prefix work exactly as before:
+
+```
+[N:Jonah|friendly|injured]               (plain — works as always)
+[N:Jonah|trait:friendly|status:injured]  (categorized — same information, grouped)
+```
+
+=== 4.1.8 Multi-Line Tags
+<multi-line-tags>
+For characters with many tags, the single-line form can become hard to read. Break a tag across lines using the same `|` separator, with the closing `]` on its own line:
+
+```
+[PC:Jonah
+  | trait: friendly, curious, reckless
+  | weakness: naive, easily distracted
+  | status: wounded
+  | stat: HP 8, Stress 2
+]
+```
+
+Multi-line and single-line form are equivalent --- use whichever is readable at the current level of complexity. Multi-line tags work naturally at session start (character sheets and status blocks) or whenever a character's state becomes complex enough to warrant it.
+
+#strong[Analog format:] Indent the continuation lines and draw a closing bracket at the end of the last line:
+
+```
+[PC:Jonah
+  trait: friendly, curious | status: wounded
+  stat: HP 8, Stress 2]
+```
+
+=== 4.1.9 Roll Context
+<roll-context>
+When a roll draws on specific tags, traits, or situational modifiers --- especially in tag-heavy games like PbtA or City of Mist --- list them inside square brackets within the `d:` line:
+
+```
+d: Investigate 2d6 [Be kind to others, Naive] = 8 -> Mixed
+d: Stealth d6 [+cover, -injured] vs TN 4 -> Fail
+d: Persuade 2d6 [power: silver tongue | against: suspicious-2] = 9 -> Strong Hit
+```
+
+The `[...]` inside `d:` means "these tags are #strong[active for this roll];." This is distinct from the `+`/`-` tag update shorthand on standalone tag lines (§4.1.1). Roll context is temporary --- it records which tags contributed to the roll without changing the character's persistent state.
+
+Use category prefixes inside the brackets when your game distinguishes types of modifiers:
+
+```
+d: Investigate 2d6 [power: Be kind to others, Naive | against: reluctant-to-talk-1] = 8 -> Mixed
+```
+
+#strong[When to use:] Only when the active tags aren't obvious from the action line, or when your system requires explicitly tracking which tags contributed to a roll. For most games, the action line alone is sufficient.
 
 == 4.2 Progress Tracking
 <progress-tracking>
@@ -2564,6 +2623,66 @@ What if the oracle doesn't help?
 
 #strong[Pro tip:] If an oracle result doesn't spark fiction, it's okay to re-frame the question or roll again. The oracle serves your story, not the other way around.
 
+= 10. Add-ons
+<add-ons>
+The five core symbols --- `@`, `?`, `d:`, `->`, `=>` --- cover the vast majority of solo play. But some games go deeper in specific directions: tactical combat with initiative and damage tracking, dungeon crawling with room states and light management, resource systems where every torch matters. These needs are real, but they're not universal.
+
+That's what add-ons are for.
+
+== 10.1 What Add-ons Are
+<what-add-ons-are>
+An add-on is a #strong[standalone extension document] that deepens Lonelog notation for a specific type of play. Each add-on:
+
+- Works with the five core symbols --- it extends them, never replaces them
+- Introduces conventions (tags, formats, structural blocks) suited to its domain
+- Functions independently --- you read just the add-on you need, not the whole ecosystem
+- Integrates cleanly with other add-ons if you use more than one
+
+Add-ons live in separate files rather than in this document. That's a deliberate choice: a dungeon crawler who never fights in initiative order shouldn't have to scroll past four pages of combat rules. Lonelog's core should stay lean. Add-ons let the system grow without bloating the manual you carry to the table.
+
+Think of the core as a language, and add-ons as domain vocabularies. A linguist and a sailor both speak English, but the sailor has words for things the linguist doesn't need. The words don't conflict --- they extend.
+
+== 10.2 Why Separate Files
+<why-separate-files>
+Three reasons:
+
+#strong[Download only what you need.] On itch.io, in a Markdown vault, or printed and tucked into a notebook --- you grab the add-ons that match your current campaign. Running Ironsworn? Grab the resource tracking add-on. Running a dungeon crawl? Add the dungeon add-on. Nothing you don't use.
+
+#strong[Update independently.] If the Combat Add-on refines its initiative notation, that update doesn't touch the core spec. Core and add-ons can evolve at their own pace, stay in sync where they need to, and diverge where they legitimately differ.
+
+#strong[Share and remix freely.] The community can write, publish, and share add-ons without modifying the core document. A player who develops a brilliant notation for hex crawling can release it as a Lonelog add-on. The shared core ensures it's immediately readable to anyone who knows Lonelog.
+
+== 10.3 How to Use Add-ons
+<how-to-use-add-ons>
+#strong[Start with the core.] If you're new to Lonelog, spend at least a session or two with just the five core symbols before layering anything on top. The core handles more than you might expect.
+
+#strong[Add one at a time.] If you're adding a dungeon crawl notation and a resource tracking system in the same campaign, introduce them one session apart. That gives you time to settle each one before combining them.
+
+#strong[Mix and match freely.] Add-ons are designed to coexist. The Combat Add-on and the Dungeon Crawling Add-on, for example, are written to work in the same session log without symbol conflicts.
+
+#strong[When in doubt, skip it.] If an add-on feels like overhead rather than help, don't use it. The core notation is always sufficient. Add-ons serve your play; your play doesn't serve add-ons.
+
+== 10.4 Available Add-ons
+<available-add-ons>
+The following add-ons are part of the official Lonelog ecosystem:
+
+#table(
+  columns: (33.33%, 25%, 41.67%),
+  align: (auto,auto,auto,),
+  table.header([Add-on], [File], [Best For],),
+  table.hline(),
+  [Combat Add-on], [`addons/combat.md`], [Tactical fights, initiative, HP tracking],
+  [Dungeon Crawling Add-on], [`addons/dungeon.md`], [Room exploration, light, traps, mapping notes],
+  [Resource Tracking Add-on], [`addons/resources.md`], [Inventory, usage dice, wealth, supply],
+)
+Community-created add-ons follow the same conventions. See the #strong[Community Add-on Guidelines] for how to write one, and the Lonelog itch.io page for the community library.
+
+== 10.5 A Note for Add-on Authors
+<a-note-for-add-on-authors>
+If you're writing a Lonelog add-on --- for your own use, to share with friends, or to publish --- the #strong[Community Add-on Guidelines] and #strong[Add-on Template] are your starting point. They cover the design constraints that keep add-ons compatible with core, the required metadata format, and how to structure examples so they read naturally alongside core Lonelog logs.
+
+The guiding principle: #strong[extend, don't replace.] A Lonelog add-on that invents its own action symbol isn't a Lonelog add-on --- it's a fork. The power of the ecosystem comes from shared conventions at the core, with creativity in the extensions.
+
 = Appendices
 <appendices>
 == A. Solo RPG Notation Legend
@@ -2603,6 +2722,7 @@ Bookmark this section. You'll come back to it often in your first few sessions, 
 - `[E:Name X/Y]` --- Event/Clock
 - `[Thread:Name|state]` --- Story thread
 - `[PC:Name|stats]` --- Player character
+- `[PC:Name|category:tag,tag]` --- Tag with category grouping (§4.1.7)
 
 === A.4 Progress Tracking
 <a.4-progress-tracking>
@@ -2634,6 +2754,30 @@ Bookmark this section. You'll come back to it often in your first few sessions, 
 <a.9-complete-example-line>
 ```
 S3 @Pick lock d:15≥14 S => door opens quietly [N:Guard|alert]
+```
+
+=== A.10 Tag Categories, Multi-line, and Roll Context (v1.3)
+<a.10-tag-categories-multi-line-and-roll-context-v1.3>
+#strong[Category syntax:]
+
+```
+[PC:Jonah|trait:friendly,curious|status:wounded|stat:HP 8]
+```
+
+#strong[Multi-line form:]
+
+```
+[PC:Jonah
+  | trait: friendly, curious
+  | status: wounded
+  | stat: HP 8, Stress 2
+]
+```
+
+#strong[Roll context inside `d:`:]
+
+```
+d: Investigate 2d6 [power: Be kind to others, Naive | against: reluctant-to-talk-1] = 8 -> Mixed
 ```
 
 = B. FAQ
@@ -2706,6 +2850,8 @@ This notation is inspired by the #link("https://alfredvalley.itch.io/the-valley-
 
 #strong[Version History:]
 
+- v 1.3.0: Added tag category syntax (§4.1.7), multi-line tag form (§4.1.8), and roll context blocks inside `d:` (§3.2.1).
+- v 1.2.0: Added Section 10: Add-ons.
 - v 1.1.0: Clarified the use of the license. Added specifications for inline definitions, filtered option sets and multi-line result blocks in section 4.3.
 - v 1.0.0: Evolved from Solo TTRPG Notation v2.0 by Roberto Bisceglie
 
