@@ -16,12 +16,6 @@
       loadNavbar: true,
       relativePath: true,
       fallbackLanguages: ['en'],
-      hooks: {
-        beforeEach: function(content) {
-          // Strip YAML frontmatter
-          return content.replace(/^---[\s\S]*?---\n/, '');
-        }
-      },
       search: {
         paths: 'auto',
         placeholder: {
