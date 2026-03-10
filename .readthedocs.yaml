@@ -8,13 +8,14 @@ build:
     # Crea cartella output root
     - mkdir -p $READTHEDOCS_OUTPUT/html/
 
-    # Docsify entry point, navbar e assets
+    # Docsify entry point, navbar, sidebar root e assets
     - cp index.html $READTHEDOCS_OUTPUT/html/
     - cp docs/_navbar.md $READTHEDOCS_OUTPUT/html/
+    - cp docs/_sidebar.md $READTHEDOCS_OUTPUT/html/
     - cp -r assets/ $READTHEDOCS_OUTPUT/html/assets/
     - cp docs/README.md $READTHEDOCS_OUTPUT/html/README.md
 
-    # Copia MD per lingua (senza strip frontmatter)
+    # Copia MD per lingua
     - cp -r docs/en/ $READTHEDOCS_OUTPUT/html/en/
     - cp -r docs/it/ $READTHEDOCS_OUTPUT/html/it/
     - cp -r docs/fr/ $READTHEDOCS_OUTPUT/html/fr/
