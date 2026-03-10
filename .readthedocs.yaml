@@ -4,26 +4,20 @@ build:
   os: ubuntu-22.04
   tools:
     python: "3.12"
-  commands:
-    # Crea cartella output root
-    - mkdir -p $READTHEDOCS_OUTPUT/html/
+  jobs:
+    build:
+      html:
+        # Root output
+        - mkdir -p $READTHEDOCS_OUTPUT/html/
 
-    # Docsify entry point, navbar, sidebar root e assets
-    - cp index.html $READTHEDOCS_OUTPUT/html/
-    - cp docs/_navbar.md $READTHEDOCS_OUTPUT/html/
-    - cp docs/_sidebar.md $READTHEDOCS_OUTPUT/html/
-    - cp -r assets/ $READTHEDOCS_OUTPUT/html/assets/
-    - cp docs/README.md $READTHEDOCS_OUTPUT/html/README.md
+        # Docsify entry point e assets (comuni a tutte le lingue)
+        - cp index.html $READTHEDOCS_OUTPUT/html/
+        - cp -r assets/ $READTHEDOCS_OUTPUT/html/assets/
 
-    # Copia MD per lingua
-    - cp -r docs/en/ $READTHEDOCS_OUTPUT/html/en/
-    - cp -r docs/it/ $READTHEDOCS_OUTPUT/html/it/
-    - cp -r docs/fr/ $READTHEDOCS_OUTPUT/html/fr/
+        # Copia i file della lingua corrente nella root dell'output
+        # RTD imposta $READTHEDOCS_LANGUAGE automaticamente (en, it, fr)
+        - cp -r docs/$READTHEDOCS_LANGUAGE/. $READTHEDOCS_OUTPUT/html/
 
-    # Render Quarto sotto /downloads/
-    - mkdir -p $READTHEDOCS_OUTPUT/html/downloads/en/
-    - mkdir -p $READTHEDOCS_OUTPUT/html/downloads/it/
-    - mkdir -p $READTHEDOCS_OUTPUT/html/downloads/fr/
-    - cp -r output/en/. $READTHEDOCS_OUTPUT/html/downloads/en/
-    - cp -r output/it/. $READTHEDOCS_OUTPUT/html/downloads/it/
-    - cp -r output/fr/. $READTHEDOCS_OUTPUT/html/downloads/fr/
+        # Downloads (PDF, ePub) per la lingua corrente
+        - mkdir -p $READTHEDOCS_OUTPUT/html/downloads/
+        - cp -r output/$READTHEDOCS_LANGUAGE/. $READTHEDOCS_OUTPUT/html/downloads/

@@ -1,10 +1,10 @@
-* [Lonelog](lonelog.md)
+* [Lonelog](/lonelog)
 * Add-ons
-  * [Guidelines](lonelog-addon-guidelines.md)
-  * [Template](lonelog-addon-template.md)
-  * [Combat](lonelog-combat-addon.md)
-  * [Dungeon Crawling](lonelog-dungeon-crawling-addon.md)
-  * [Resource Tracking](lonelog-resource-tracking-addon.md)
+  * [Guidelines](/lonelog-addon-guidelines)
+  * [Template](/lonelog-addon-template)
+  * [Combat](/lonelog-combat-addon)
+  * [Dungeon Crawling](/lonelog-dungeon-crawling-addon)
+  * [Resource Tracking](/lonelog-resource-tracking-addon)
 * Downloads
   * Lonelog
     * [PDF](/downloads/lonelog.pdf)
@@ -24,7 +24,3 @@
     * [PDF](/downloads/lonelog-resource-tracking-addon.pdf)
     * [EPUB](/downloads/lonelog-resource-tracking-addon.epub)
     * [ODT](/downloads/lonelog-resource-tracking-addon.odt)
-
-
-
-

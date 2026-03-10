@@ -16,8 +16,7 @@
       repo: 'https://github.com/zeruhur/lonelog',
       loadSidebar: true,
       loadNavbar: true,
-      relativePath: true,
-      fallbackLanguages: ['en'],
+      homepage: 'readme.md',
       plugins: [
         function(hook) {
           hook.beforeEach(function(content) {
@@ -27,16 +26,8 @@
       ],
       search: {
         paths: 'auto',
-        placeholder: {
-          '/it/': 'Cerca...',
-          '/fr/': 'Rechercher...',
-          '/':    'Search...'
-        },
-        noData: {
-          '/it/': 'Nessun risultato',
-          '/fr/': 'Aucun r\u00e9sultat',
-          '/':    'No results'
-        }
+        placeholder: 'Search...',
+        noData: 'No results'
       }
     }
   </script>
