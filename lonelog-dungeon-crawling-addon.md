@@ -2,7 +2,7 @@
 title: "Lonelog: Dungeon Crawling Add-on"
 subtitle: "Optional Room Tracking for Dungeon Exploration"
 author: Roberto Bisceglie
-version: 1.0.0
+version: 1.1.0
 license: CC BY-SA 4.0
 lang: en
 parent: Lonelog v1.3.0
@@ -31,7 +31,7 @@ If the dungeon is more narrative backdrop than mechanical challenge, or if you'r
 | `[R:ID\|status\|desc]` | Room tag with optional description | `[R:3\|cleared\|library]` |
 | `exits DIR:ID` | Record connections between rooms (optional) | `exits N:R2, E:R3` |
 | `[#R:ID]` | Reference a previously established room | `[#R:3]` |
-| `=== Dungeon Status ===` | Session-opening snapshot of all room states | Multiple `[R:]` tags grouped |
+| `[DUNGEON STATUS]` / `[/DUNGEON STATUS]` | Session-opening snapshot of all room states | Multiple `[R:]` tags grouped |
 
 **No new core symbols.** This add-on introduces no additions to `@`, `?`, `d:`, `->`, or `=>`.
 
@@ -44,6 +44,8 @@ If the dungeon is more narrative backdrop than mechanical challenge, or if you'r
 **Minimal vocabulary.** One new tag covers the entire add-on. Every other element—scene headers, oracle questions, consequences, clocks—uses the core notation you already know. The cognitive overhead of adding dungeon crawling to a Lonelog session is one tag format.
 
 **Map-friendly by design.** Room tags are built to work alongside a visual map, not replace one. Room IDs connect your log to your map. Mark them on graph paper; reference the same IDs in your tags. The two systems reinforce each other.
+
+**Block tags follow the core convention.** Structural blocks use `[BLOCK]` / `[/BLOCK]` bracket syntax — identical to `[COMBAT]` / `[/COMBAT]` in the Combat Add-on. For analog notebooks, use `--- BLOCK ---` / `--- END BLOCK ---` dashed separators instead.
 
 ---
 
@@ -214,17 +216,30 @@ When you sit down for a new session mid-dungeon, you need a snapshot: which room
 **Format:**
 
 ```
-=== Dungeon Status ===
+[DUNGEON STATUS]
 [R:1|status|description]
 [R:2|status|description]
 ...
+[/DUNGEON STATUS]
 ```
 
 **When to open a block:** At the top of a session when resuming a dungeon crawl, before your first scene.
 
 **When to update it:** At session end, or at the start of the next session, to reflect what changed.
 
-**Digital format:**
+**Example — digital:**
+
+```
+[DUNGEON STATUS]
+[R:1|cleared, looted|entry cave|exits N:R2, E:R3]
+[R:2|cleared|guard room|exits S:R1, W:R5]
+[R:3|active|library|exits W:R1]
+[R:4|unexplored]
+[R:5|locked|heavy door|exits E:R2]
+[/DUNGEON STATUS]
+```
+
+**Example — analog:**
 
 ```
 === Session 3: The Orc Warren ===
@@ -232,23 +247,12 @@ When you sit down for a new session mid-dungeon, you need a snapshot: which room
 [Duration]    1h30
 [Recap]       Found the warren entrance. Need to recover the stolen relic.
 
-=== Dungeon Status ===
-[R:1|cleared, looted|entry cave|exits N:R2, E:R3]
-[R:2|cleared|guard room|exits S:R1, W:R5]
-[R:3|active|library|exits W:R1]
-[R:4|unexplored]
-[R:5|locked|heavy door|exits E:R2]
-```
-
-**Analog format:**
-
-```
 --- DUNGEON STATUS ---
 R1: cleared, looted (entry cave)
 R2: cleared (guard room)
 R3: active (library)
 R4: unexplored
-R5: locked
+R5: locked (heavy door)
 --- END STATUS ---
 ```
 
@@ -373,10 +377,11 @@ tbl: d20=8 -> "Rations and a crude map"
 Classic dungeon crawl procedures map naturally to this add-on. Turn-based exploration, wandering monster checks, and the six-minute turn structure all generate natural tag update points. Use Room tags at the end of each turn or when something significant changes.
 
 ```
-=== Dungeon Status (Level 1) ===
+[DUNGEON STATUS]
 [R:1|cleared, looted|entry hall|exits N:R2, E:R3]
 [R:2|cleared|guard room|exits S:R1, W:R5]
 [R:3|active|crypt|exits W:R1, D:R8]
+[/DUNGEON STATUS]
 
 S4 *R3 – Crypt, turn 3*
 
@@ -399,9 +404,10 @@ Ironsworn's Delve mechanic uses themed sectors rather than numbered rooms. Map s
 ```
 [Track:Iron Barrow|Progress 2/10]
 
-=== Delve Status ===
+[DUNGEON STATUS]
 [R:1|cleared|Threshold – rusted gate|exits N:R2]
 [R:2|active|Shadow – collapsed corridor]
+[/DUNGEON STATUS]
 
 @ Delve the Depths (Shadow theme)
 d: d6+2=7 vs d10=4, d10=9 -> Weak Hit
@@ -476,11 +482,12 @@ d: 2d6+1=10 -> 10+ Hit: ask three questions
 
 ```
 ✔ === Session 4 ===
-  === Dungeon Status ===
+  [DUNGEON STATUS]
   [R:1|cleared, looted|entry]
   [R:2|cleared|barracks]
   [R:3|unexplored]
   [R:4|locked|iron door]
+  [/DUNGEON STATUS]
 ```
 
 **Don't: Reconstruct dungeon state by scanning the whole log**
@@ -540,7 +547,7 @@ d: 2d6+1=10 -> 10+ Hit: ask three questions
 
 | Block | Opens When | Closes When |
 |-------|-----------|-------------|
-| `=== Dungeon Status ===` | Session start when resuming a dungeon | Replaced by updated block next session |
+| `[DUNGEON STATUS]` / `[/DUNGEON STATUS]` | Session start when resuming a dungeon | Replaced by updated block next session |
 
 ### Directional Shortcuts
 
@@ -549,9 +556,10 @@ d: 2d6+1=10 -> 10+ Hit: ask three questions
 ### Complete Example
 
 ```
-=== Dungeon Status ===
+[DUNGEON STATUS]
 [R:1|cleared, looted|entry cave|exits N:R2, E:R3]
 [R:2|unexplored] [R:3|unexplored]
+[/DUNGEON STATUS]
 
 S7 *North passage*
 
@@ -602,6 +610,7 @@ Written to address the [request](https://www.reddit.com/r/Solo_Roleplaying/comme
 
 **Version History:**
 
+- v 1.1.0: Block tags unified with `[BLOCK]`/`[/BLOCK]` convention; design principles updated
 - v 1.0.0: Rewritten as a compliant add-on (previously "Dungeon Crawling Module")
 
 This work is licensed under the **Creative Commons Attribution-ShareAlike 4.0 International License**.

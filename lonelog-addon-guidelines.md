@@ -2,7 +2,7 @@
 title: "Lonelog: Community Add-on Guidelines"
 subtitle: "How to Write Add-ons That Work with the Core"
 author: Roberto Bisceglie
-version: 1.0.0
+version: 1.1.0
 license: CC BY-SA 4.0
 lang: en
 parent: Lonelog v1.1.0
@@ -153,7 +153,44 @@ When writing your add-on, match this tone. Avoid:
 - Assumptions about which RPG system the reader uses
 - Implying that players who don't use the add-on are playing incorrectly
 
-### 3.3 Example Quality
+### 3.3 Structural Block Syntax
+
+When your add-on introduces a structural block — a delimited region that wraps a mode of play (like combat, a dungeon session status, or a resource snapshot) — use the bracket tag convention:
+
+```
+[BLOCK NAME]
+...contents...
+[/BLOCK NAME]
+```
+
+This is the same pattern as `[COMBAT]` / `[/COMBAT]` in the Combat Add-on. It keeps structural blocks visually consistent with ordinary tags and makes them grep-friendly.
+
+For **analog notebook** equivalents, use dashed separators:
+
+```
+--- BLOCK NAME ---
+...contents...
+--- END BLOCK NAME ---
+```
+
+**Do not use** `=== ... ===` or `--- ... ---` as the primary (digital) block delimiter. Reserve those for analog alternatives only.
+
+**Compliant:**
+```
+[DUNGEON STATUS]
+[R:1|cleared|entry hall]
+[/DUNGEON STATUS]
+```
+
+**Non-compliant:**
+```
+=== Dungeon Status ===
+[R:1|cleared|entry hall]
+```
+
+Every structural block must have an explicit closing tag. Open-ended blocks (no closing delimiter) are not compliant.
+
+### 3.4 Example Quality
 
 Examples are the most important part of any add-on. They should:
 
@@ -227,3 +264,4 @@ Before publishing or sharing your add-on, verify:
 - [ ] "What This Add-on Adds" table present
 - [ ] Best practices section with Do/Don't examples
 - [ ] FAQ addresses likely edge case questions
+- [ ] Structural blocks use `[BLOCK]` / `[/BLOCK]` syntax (not `===` or `---` as primary format)

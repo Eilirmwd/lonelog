@@ -2,7 +2,7 @@
 title: "Lonelog: Resource Tracking Add-on"
 subtitle: "Inventory, Supplies, and Wealth Notation"
 author: Roberto Bisceglie
-version: 1.0.0
+version: 1.1.0
 license: CC BY-SA 4.0
 lang: en
 parent: Lonelog v1.3.0
@@ -30,7 +30,7 @@ If your system handwaves supplies or resolves resource scarcity with a single or
 | `[Inv:Item\|qty\|props]` | Track individual items with quantity and properties | `[Inv:Torch\|3]` |
 | Supply notation | Abstract resource levels inside `[PC:]` | `[PC:Kael\|Supply d8]` |
 | `[Wealth:Currency N]` | Currency and trade tracking | `[Wealth:Gold 45\|Silver 12]` |
-| `--- RESOURCES ---` block | Snapshot of current resources at session boundaries | See §5 |
+| `[RESOURCES]` / `[/RESOURCES]` block | Snapshot of current resources at session boundaries | See §5 |
 
 **No new core symbols.** This add-on introduces no additions to `@`, `?`, `d:`, `->`, or `=>`.
 
@@ -43,6 +43,8 @@ If your system handwaves supplies or resolves resource scarcity with a single or
 **Separate what you carry from who you are.** The `[PC:]` tag describes your character — HP, stress, conditions, abstract resources that feel like stats. The `[Inv:]` tag describes your stuff — concrete, countable things that come and go. This separation keeps both tags readable as your campaign grows.
 
 **Record changes at the point of fiction.** Don't maintain a separate inventory spreadsheet you update silently. Show resources changing *when they change*, inline with the actions and consequences that cause it. Your log should tell the story of your resources, not just their current state.
+
+**Block tags follow the core convention.** Structural blocks use `[BLOCK]` / `[/BLOCK]` bracket syntax — identical to `[COMBAT]` / `[/COMBAT]` in the Combat Add-on. For analog notebooks, use `--- BLOCK ---` / `--- END BLOCK ---` dashed separators instead.
 
 ---
 
@@ -452,17 +454,17 @@ For long sessions or campaigns where resources matter, a snapshot at session bou
 **Format:**
 
 ```
---- RESOURCES ---
+[RESOURCES]
 [PC:Name|stats]
 [Wealth:currencies]
 [Inv:items...]
---- /RESOURCES ---
+[/RESOURCES]
 ```
 
 **Example — digital:**
 
 ```
---- RESOURCES ---
+[RESOURCES]
 [PC:Kael|HP 12/15|Supply d6|Stress 2]
 [Wealth:Gold 52|Silver 8]
 [Inv:Short Sword|1|sharpened]
@@ -473,20 +475,20 @@ For long sessions or campaigns where resources matter, a snapshot at session bou
 [Inv:Healing Potion|1|restores d8 HP]
 [Inv:Arrow|9]
 [Inv:Bone Amulet|1|Ward of the Dead]
---- /RESOURCES ---
+[/RESOURCES]
 ```
 
 **Example — analog:**
 
 ```
-=== RESOURCES ===
+--- RESOURCES ---
 PC:  Kael | HP 12/15 | Supply d6 | Stress 2
 Wealth: Gold 52 | Silver 8
 Inv: Short Sword (sharpened), Shield (cracked)
      Torch ×2, Rations ×3 days
      Rope 50ft (frayed), Healing Potion ×1
      Arrow ×9, Bone Amulet (Ward of the Dead)
-=== /RESOURCES ===
+--- END RESOURCES ---
 ```
 
 **When to use it:**
@@ -516,11 +518,11 @@ Inv: Short Sword (sharpened), Shield (cracked)
 **Combined example — all three add-ons:**
 
 ```
---- RESOURCES ---
+[RESOURCES]
 [PC:Kael|HP 12/15|Supply d6]
 [Inv:Torch|2] [Inv:Arrow|9] [Inv:Healing Potion|1]
 [Wealth:Gold 52]
---- /RESOURCES ---
+[/RESOURCES]
 
 S5 *Entering the crypt*
 [R:1|active|Entry hall, bones everywhere|exits N:R2, E:R3]
@@ -670,10 +672,10 @@ d: Battery d4=1 -> Step down!
 **Do: Use the Resource Status Block at session boundaries**
 
 ```
-✔ --- RESOURCES ---
+✔ [RESOURCES]
   [PC:Kael|HP 12/15|Supply d6]
   [Inv:Torch|2] [Inv:Arrow|9]
-  --- /RESOURCES ---
+  [/RESOURCES]
 ```
 
 **Don't: Let bookkeeping overwhelm the fiction**
@@ -754,7 +756,7 @@ d: Battery d4=1 -> Step down!
 
 | Block | Opens When | Closes When |
 |-------|-----------|-------------|
-| `--- RESOURCES ---` | Session start/end, before major expeditions | After all current `[Inv:]` and `[PC:]` tags are listed |
+| `[RESOURCES]` / `[/RESOURCES]` | Session start/end, before major expeditions | After all current `[Inv:]` and `[PC:]` tags are listed |
 
 ### Usage Die Step-Down Chain
 
@@ -765,10 +767,10 @@ d12 → d10 → d8 → d6 → d4 → depleted
 ### Complete Example
 
 ```
---- RESOURCES ---
+[RESOURCES]
 [PC:Kael|HP 10/15|Supply d6] [Wealth:Gold 52]
 [Inv:Torch|2] [Inv:Arrow|9] [Inv:Healing Potion|1]
---- /RESOURCES ---
+[/RESOURCES]
 
 @ Light a torch
 [Inv:Torch-1] [Timer:Torchlight 6]
@@ -818,6 +820,7 @@ This add-on extends [Lonelog](https://zeruhur.itch.io/lonelog) by Roberto Bisceg
 
 **Version History:**
 
+- v 1.1.0: Block tags unified with `[BLOCK]`/`[/BLOCK]` convention; design principles updated
 - v 1.0.0: Rewritten as a compliant add-on (previously "Resource Tracking Module")
 
 This work is licensed under the **Creative Commons Attribution-ShareAlike 4.0 International License**.
