@@ -8,23 +8,18 @@ build:
     # Crea cartella output root
     - mkdir -p $READTHEDOCS_OUTPUT/html/
 
-    # Docsify entry point e navbar
+    # Docsify entry point, navbar e assets
     - cp index.html $READTHEDOCS_OUTPUT/html/
     - cp docs/_navbar.md $READTHEDOCS_OUTPUT/html/
     - cp -r assets/ $READTHEDOCS_OUTPUT/html/assets/
-
-    # Home page
     - cp docs/README.md $READTHEDOCS_OUTPUT/html/README.md
 
-    # Contenuto MD per lingua (strip frontmatter YAML)
-    - mkdir -p $READTHEDOCS_OUTPUT/html/en/
-    - mkdir -p $READTHEDOCS_OUTPUT/html/it/
-    - mkdir -p $READTHEDOCS_OUTPUT/html/fr/
-    - find docs/en/ -name "*.md" -exec sh -c 'sed "/^---$/,/^---$/d" "$1" > "$READTHEDOCS_OUTPUT/html/en/$(basename $1)"' _ {} \;
-    - find docs/it/ -name "*.md" -exec sh -c 'sed "/^---$/,/^---$/d" "$1" > "$READTHEDOCS_OUTPUT/html/it/$(basename $1)"' _ {} \;
-    - find docs/fr/ -name "*.md" -exec sh -c 'sed "/^---$/,/^---$/d" "$1" > "$READTHEDOCS_OUTPUT/html/fr/$(basename $1)"' _ {} \;
+    # Copia MD per lingua (senza strip frontmatter)
+    - cp -r docs/en/ $READTHEDOCS_OUTPUT/html/en/
+    - cp -r docs/it/ $READTHEDOCS_OUTPUT/html/it/
+    - cp -r docs/fr/ $READTHEDOCS_OUTPUT/html/fr/
 
-    # Render Quarto per lingua sotto /downloads/
+    # Render Quarto sotto /downloads/
     - mkdir -p $READTHEDOCS_OUTPUT/html/downloads/en/
     - mkdir -p $READTHEDOCS_OUTPUT/html/downloads/it/
     - mkdir -p $READTHEDOCS_OUTPUT/html/downloads/fr/
