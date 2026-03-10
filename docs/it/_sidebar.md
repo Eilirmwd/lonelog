@@ -1,3 +1,5 @@
 * [Lonelog](it/lonelog-it.md)
 * Download
-  * [PDF](/downloads/it/)
+    * [PDF](/downloads/it/lonelog-it.pdf)
+    * [EPUB](/downloads/it/lonelog-it.epub)
+    * [ODT](/downloads/it/lonelog-it.odt)
