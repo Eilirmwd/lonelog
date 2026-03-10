@@ -48,29 +48,31 @@ The documentation is available in multiple formats and languages:
 
 ### English
 
-- [PDF](lonelog.pdf) - Print-ready version
-- [EPUB](lonelog.epub) - E-reader format
-- [ODT](lonelog.odt) - LibreOffice/Word format
+- [PDF](output/en/lonelog.pdf) - Print-ready version
+- [EPUB](output/en/lonelog.epub) - E-reader format
+- [ODT](output/en/lonelog.odt) - LibreOffice/Word format
 
 ### Italian (Italiano)
 
-- [PDF](lonelog-it.pdf) - Versione per la stampa
-- [EPUB](lonelog-it.epub) - Formato e-reader
-- [ODT](lonelog-it.odt) - Formato LibreOffice/Word
+- [PDF](output/it/lonelog-it.pdf) - Versione per la stampa
+- [EPUB](output/it/lonelog-it.epub) - Formato e-reader
+- [ODT](output/it/lonelog-it.odt) - Formato LibreOffice/Word
 
 ### French (Français)
 
-- [PDF](lonelog-fr.pdf) - Version imprimable
-- [EPUB](lonelog-fr.epub) - Format e-reader
-- [ODT](lonelog-fr.odt) - Format LibreOffice/Word
+- [PDF](output/fr/lonelog-fr.pdf) - Version imprimable
+- [EPUB](output/fr/lonelog-fr.epub) - Format e-reader
+- [ODT](output/fr/lonelog-fr.odt) - Format LibreOffice/Word
 
-### Optional Modules
+### Optional Add-ons
 
 Extended notation for specific gameplay needs:
 
-- [Combat Module](lonelog-combat-module.md) - Tactical encounter notation
-- [Dungeon Crawling Module](lonelog-dungeon-crawling-module.md) - Exploration notation
-- [Resource Tracking Module](lonelog-resource-tracking-module.md) - Inventory and supplies
+- [Combat Add-on](docs/en/lonelog-combat-addon.md) - Tactical encounter notation
+- [Dungeon Crawling Add-on](docs/en/lonelog-dungeon-crawling-addon.md) - Exploration notation
+- [Resource Tracking Add-on](docs/en/lonelog-resource-tracking-addon.md) - Inventory and supplies
+- [Add-on Guidelines](docs/en/lonelog-addon-guidelines.md) - How to write your own add-on
+- [Add-on Template](docs/en/lonelog-addon-template.md) - Starter template
 
 ## Features
 
@@ -95,52 +97,68 @@ Install Quarto:
 
 ### Build Commands
 
-Render all documents:
+Render all languages:
 
 ```bash
-quarto render
+for lang in en it fr; do
+  quarto render docs/$lang/lonelog*.md --output-dir output/$lang/
+done
 ```
 
 Render a specific language:
 
 ```bash
-quarto render lonelog.md      # English
-quarto render lonelog-it.md   # Italian
-quarto render lonelog-fr.md   # French
+quarto render docs/en/lonelog.md --output-dir output/en/      # English
+quarto render docs/it/lonelog-it.md --output-dir output/it/   # Italian
+quarto render docs/fr/lonelog-fr.md --output-dir output/fr/   # French
 ```
 
 Render to a specific format:
 
 ```bash
-quarto render lonelog.md --to pdf
-quarto render lonelog.md --to epub
-quarto render lonelog.md --to typst
+quarto render docs/en/lonelog.md --to pdf --output-dir output/en/
+quarto render docs/en/lonelog.md --to epub --output-dir output/en/
 ```
 
 Preview with live reload:
 
 ```bash
-quarto preview lonelog.md
+quarto preview docs/en/lonelog.md
 ```
 
 ## Project Structure
 
 ```
 /
-├── lonelog.md                              # Main English documentation
-├── lonelog-it.md                           # Italian translation
-├── lonelog-fr.md                           # French translation
-├── lonelog-combat-module.md                # Optional combat notation
-├── lonelog-dungeon-crawling-module.md      # Optional dungeon notation
-├── lonelog-resource-tracking-module.md     # Optional resource notation
+├── index.html                              # Docsify entry point
 ├── _quarto.yml                             # Quarto configuration
+├── docs/                                   # Markdown source files
+│   ├── README.md                           # Site home (language selector)
+│   ├── en/                                 # English documentation
+│   │   ├── lonelog.md                      # Main specification
+│   │   ├── lonelog-addon-guidelines.md     # Add-on guidelines
+│   │   ├── lonelog-addon-template.md       # Add-on template
+│   │   ├── lonelog-combat-addon.md         # Combat add-on
+│   │   ├── lonelog-dungeon-crawling-addon.md # Dungeon crawling add-on
+│   │   ├── lonelog-resource-tracking-addon.md # Resource tracking add-on
+│   │   └── _sidebar.md                     # Docsify sidebar (EN)
+│   ├── it/                                 # Italian translation
+│   │   ├── lonelog-it.md
+│   │   └── _sidebar.md
+│   └── fr/                                 # French translation
+│       ├── lonelog-fr.md
+│       └── _sidebar.md
+├── output/                                 # Rendered documents (Quarto)
+│   ├── en/                                 # English renders
+│   ├── it/                                 # Italian renders
+│   └── fr/                                 # French renders
 ├── _extensions/                            # Custom templates and filters
 │   ├── typst-template.typ                  # Custom Typst styling
 │   ├── typst-show.typ                      # Template partial
 │   └── pagebreak.lua                       # Pagebreak filter
-├── logo.png                                # Cover logo
-├── by-sa.png                               # CC BY-SA license badge
-└── legacy/                                 # Previous versions
+├── assets/                                 # Shared assets (images, fonts)
+├── legacy/                                 # Previous versions
+└── .readthedocs.yaml                       # Read the Docs build config
 ```
 
 ## Contributing
@@ -149,7 +167,7 @@ Contributions are welcome! Here's how you can help:
 
 ### Translations
 
-Help translate Lonelog into additional languages. Use `lonelog.md` as the source and maintain the same frontmatter structure.
+Help translate Lonelog into additional languages. Use `docs/en/lonelog.md` as the source and maintain the same frontmatter structure.
 
 ### Improvements
 
@@ -157,7 +175,7 @@ Found a typo or unclear explanation? Open an issue or submit a pull request.
 
 ### Module Extensions
 
-Created an optional module for a specific type of play? Share it with the community!
+Created an optional add-on for a specific type of play? Share it with the community!
 
 ### Examples
 
@@ -165,7 +183,9 @@ Real session logs using Lonelog are valuable for demonstrating the notation. Con
 
 ## Version History
 
-- **v1.0.0** (Current) - Renamed from "Solo TTRPG Notation" to "Lonelog" with refined notation and expanded documentation
+- **v1.3.0** (Current) - Add-on ecosystem and expanded notation
+- **v1.1.0** - Licensing and inline definitions
+- **v1.0.0** - Renamed from "Solo TTRPG Notation" to "Lonelog"
 
 ## License
 
