@@ -6,19 +6,22 @@ build:
 jobs:
   build:
     html:
-      # Crea cartella output root
       - mkdir -p $READTHEDOCS_OUTPUT/html/
 
-      # Docsify: index e assets
+      # Docsify entry point e navbar
       - cp index.html $READTHEDOCS_OUTPUT/html/
+      - cp _navbar.md $READTHEDOCS_OUTPUT/html/
       - cp -r assets/ $READTHEDOCS_OUTPUT/html/assets/
 
       # Contenuto MD per lingua
       - cp -r docs/en/ $READTHEDOCS_OUTPUT/html/en/
       - cp -r docs/it/ $READTHEDOCS_OUTPUT/html/it/
+      - cp -r docs/fr/ $READTHEDOCS_OUTPUT/html/fr/
 
       # Render Quarto per lingua sotto /downloads/
       - mkdir -p $READTHEDOCS_OUTPUT/html/downloads/en/
       - mkdir -p $READTHEDOCS_OUTPUT/html/downloads/it/
+      - mkdir -p $READTHEDOCS_OUTPUT/html/downloads/fr/
       - cp -r output/en/ $READTHEDOCS_OUTPUT/html/downloads/en/
       - cp -r output/it/ $READTHEDOCS_OUTPUT/html/downloads/it/
+      - cp -r output/fr/ $READTHEDOCS_OUTPUT/html/downloads/fr/
