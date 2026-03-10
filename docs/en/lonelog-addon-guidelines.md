@@ -51,11 +51,15 @@ The core spec defines these tag prefixes:
 - `Clock:`, `Track:`, `Timer:` — Progress elements
 - `#` prefix — Reference tags
 - `Inv:`, `Wealth:` — Resource tracking (Resource Add-on)
+- `R:` — Rooms (Dungeon Crawling Add-on)
+- `F:` — Combatant foes (Combat Add-on)
 
 Do not reuse these prefixes for different purposes. If you need a new tag type, use a prefix that isn't in this list and document it clearly in your add-on's quick reference.
 
-**Compliant:** `[R:Room4|active]` for room states (Dungeon Crawling Add-on).  
+**Compliant:** `[R:Room4|active]` for room states (Dungeon Crawling Add-on).
 **Non-compliant:** `[L:Room4|active]` — this repurposes the Location tag for a different semantic meaning.
+
+**Watch for collision between tags and structural markers.** The Dungeon Crawling Add-on uses `[R:]` for rooms; the Combat Add-on originally used `R#` for rounds — the same letter, causing ambiguity in combined logs. The solution was to change round markers to `Rd#`. When introducing any new marker or tag prefix, check for collisions not just with existing tags but with structural conventions (round markers, roster lines, etc.) across the full add-on ecosystem.
 
 When uncertain whether a prefix conflicts, check the full add-on ecosystem before finalizing your choice.
 

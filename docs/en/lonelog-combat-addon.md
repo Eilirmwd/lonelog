@@ -2,7 +2,7 @@
 title: "Lonelog: Combat Add-on"
 subtitle: "Optional Notation for Tactical Encounters"
 author: Roberto Bisceglie
-version: 1.0.0
+version: 1.1.0
 license: CC BY-SA 4.0
 lang: en
 parent: Lonelog v1.3.0
@@ -35,9 +35,9 @@ This add-on is for everything more involved than that—games where you're track
 |----------|---------|---------|
 | `[F:Name\|stats]` | Track combatant stats and status | `[F:Thug\|HP 6\|Close]` |
 | `[COMBAT]` / `[/COMBAT]` | Delimit a tactical encounter within a scene | `[COMBAT] ... [/COMBAT]` |
-| `R#` round markers | Separate initiative rounds within a combat block | `R1`, `R2`, `R3` |
+| `Rd#` round markers | Separate initiative rounds within a combat block | `Rd1`, `Rd2`, `Rd3` |
 | `@(Name) Action` | Attribute actions to non-PC actors | `@(Thug A) Lunges at me` |
-| `R# Roster: [tags]` | Snapshot all combatant states at a round boundary | `R3 Roster: [PC:HP 3] [F:Boss\|HP 4]` |
+| `Rd# Roster: [tags]` | Snapshot all combatant states at a round boundary | `Rd3 Roster: [PC:HP 3] [F:Boss\|HP 4]` |
 
 **No new core symbols.** This add-on introduces no additions to `@`, `?`, `d:`, `->`, or `=>`.
 
@@ -112,31 +112,31 @@ Or skip delimiters entirely—the round markers below already signal combat.
 
 ## 2. Round Tracking
 
-Discrete combat rounds get `R#` markers. Think of them as mini-scenes within the fight.
+Discrete combat rounds get `Rd#` markers. Think of them as mini-scenes within the fight.
 
 **Format:**
 
 ```
-R1
+Rd1
 ...actions...
 
-R2
+Rd2
 ...actions...
 ```
 
-**Numbering:** Start at `R1` each combat. Rounds are local to the encounter, not the session.
+**Numbering:** Start at `Rd1` each combat. Rounds are local to the encounter, not the session.
 
 **Example — minimal:**
 
 ```
-R1 @ Slash d:17≥12 Hit HP-5 @(Thug) d:9≥15 Miss
-R2 @ Finish him d:20≥12 Hit => [F:Thug|dead]
+Rd1 @ Slash d:17≥12 Hit HP-5 @(Thug) d:9≥15 Miss
+Rd2 @ Finish him d:20≥12 Hit => [F:Thug|dead]
 ```
 
 **Example — expanded:**
 
 ```
-R1
+Rd1
 @ Draw sword and attack Thug A
 d: d20+5=17 vs AC 12 -> Hit
 d: 1d8=5 damage
@@ -146,7 +146,7 @@ d: 1d8=5 damage
 d: d20+3=9 vs AC 15 -> Miss
 => He's off-balance—I press the advantage.
 
-R2
+Rd2
 @ Strike again
 d: d20+5=14 vs AC 12 -> Hit
 d: 1d8=6 damage
@@ -254,7 +254,7 @@ In normal play, `@` always means "I, the player character, do something." In com
 **Example — minimal:**
 
 ```
-R1
+Rd1
 @ Slash d:18≥12 Hit HP-6 => [F:Thug A|dead]
 @(Thug B) Stab d:14≥15 Miss
 ```
@@ -262,7 +262,7 @@ R1
 **Example — expanded:**
 
 ```
-R1
+Rd1
 @ Draw sword and attack Thug A
 d: d20+5=18 vs AC 12 -> Hit
 d: 1d8=6 damage
@@ -285,7 +285,7 @@ d: d20+3=14 vs AC 15 -> Miss
 **Shorthand for fast combats:** When speed matters more than readability, go chronological within each round and let the foe tags provide context:
 
 ```
-R1
+Rd1
 [F:Thug A|Close] @(A) Slash -> d:14≥15 Miss
 [PC] @ Riposte -> d:18≥12 Hit => [F:Thug A|HP-6|dead]
 [F:Thug B|Close] @(B) Stab -> d:11≥15 Miss
@@ -311,7 +311,7 @@ When more than two sides clash, structure matters most.
 
 #### 5.1 Encounter Setup
 
-Before R1, establish the battlefield with a combat snapshot listing all combatants with initial positions and key stats:
+Before Rd1, establish the battlefield with a combat snapshot listing all combatants with initial positions and key stats:
 
 ```
 S9 *Dockside ambush* [COMBAT]
@@ -329,7 +329,7 @@ This is your combat snapshot—the state of the field when initiative starts.
 For fights with many combatants and fast-changing stats, open each round with a roster line:
 
 ```
-R3 Roster: [PC:Alex|HP 3] [N:Jordan|HP 4] [F:Captain|HP 4] [F:Pirate×1|HP 4]
+Rd3 Roster: [PC:Alex|HP 3] [N:Jordan|HP 4] [F:Captain|HP 4] [F:Pirate×1|HP 4]
 ```
 
 This gives you a snapshot at each round without hunting back through the log.
@@ -377,9 +377,9 @@ Here's the same encounter at three levels of detail—find your comfort zone.
 ```
 S9 *Dock ambush* [COMBAT]
 [PC:HP 12] [F:Captain|HP 10] [F:Pirate×2|HP 4] [F:Rat|HP 2]
-R1 @Rat d:17≥10 Hit =>dead @(Cap) d:19≥14 Hit HP-7 @(Pir×2) d:15,9 vs11 1Hit [N:Jordan HP-4]
-R2 @Cap d:20≥13 Hit =>HP-6 @(Pir) d:8≥14 Miss @(Jordan) d:16≥11 Hit =>Pir dead
-R3 @Cap d:15≥13 Hit =>Cap HP-4, flees
+Rd1 @Rat d:17≥10 Hit =>dead @(Cap) d:19≥14 Hit HP-7 @(Pir×2) d:15,9 vs11 1Hit [N:Jordan HP-4]
+Rd2 @Cap d:20≥13 Hit =>HP-6 @(Pir) d:8≥14 Miss @(Jordan) d:16≥11 Hit =>Pir dead
+Rd3 @Cap d:15≥13 Hit =>Cap HP-4, flees
 [/COMBAT] =>Captain escapes
 ```
 
@@ -390,7 +390,7 @@ S9 *Dockside ambush* [COMBAT]
 [PC:Alex|HP 12] [N:Jordan|ally|HP 8]
 [F:Pirate Captain|HP 10|Close] [F:Pirate×2|HP 4|Medium] [F:Dock Rat|HP 2|Engaged]
 
-R1
+Rd1
 @ Slash at Dock Rat
 d: d20+4=17 vs AC 10 -> Hit => [F:Dock Rat|dead]
 
@@ -403,7 +403,7 @@ d: d20+3=12 vs AC 13 -> Miss
 @(Pirate×2) Crossbows at Jordan
 d: d20+2=15,9 vs AC 11 -> 1 Hit, 4 dmg => [N:Jordan|HP 4]
 
-R2
+Rd2
 @ Power attack on Captain
 d: d20+4=20 vs AC 13 -> Hit, 8 dmg => [F:Captain|HP 2|wounded]
 
@@ -415,7 +415,7 @@ d: d20+3=16 vs AC 11 -> Hit => [F:Pirate×1|dead]
 
 @(Pirate) Drops crossbow, flees => [F:Pirate×1|fled]
 
-R3
+Rd3
 @ Chase the Captain
 d: Athletics d6=3 vs TN 5 -> Fail
 => He leaps off the dock into a rowboat and vanishes into the fog.
@@ -442,7 +442,7 @@ cargo stack.
 [F:Pirate×2|HP 4 each|Medium|crossbow]
 [F:Dock Rat|HP 2|Engaged|knife]
 
-R1
+Rd1
 @ Sidestep the Dock Rat and slash
 d: d20+4=17 vs AC 10 -> Hit, 1d8=5
 => The rat-faced man crumples. [F:Dock Rat|dead]
@@ -466,7 +466,7 @@ d: 1d6=4
 
 N (Jordan): "I'm hit—still in it!"
 
-R2
+Rd2
 The Captain is close, bleeding confidence. I press the advantage.
 
 @ Power attack on Captain
@@ -484,7 +484,7 @@ d: d20+3=16 vs AC 11 -> Hit, 1d6=5
 The surviving pirate drops his crossbow and bolts into the fog.
 [F:Pirate×1|fled]
 
-R3
+Rd3
 @ Chase the Captain before he escapes
 d: Athletics d6=3 vs TN 5 -> Fail
 => He's too fast—vaults the dock railing and drops into a hidden
@@ -520,7 +520,7 @@ S7 *Guard room* [COMBAT]
 [PC:Alex|HP 10|Engaged] [Inv:Health Potion|2]
 [F:Guard×2|HP 5 each|Close|armed]
 
-R1
+Rd1
 @ Strike Guard 1
 d: d20+4=19 vs AC 12 -> Hit, 1d8=7
 => [F:Guard 1|dead]
@@ -529,7 +529,7 @@ d: d20+4=19 vs AC 12 -> Hit, 1d8=7
 d: d20+3=16 vs AC 14 -> Hit, 1d6=4
 => [PC:Alex|HP-4|HP 6]
 
-R2
+Rd2
 @ Drink healing potion (action)
 => [PC:Alex|HP+4|HP 10] [Inv:Health Potion|1]
 
@@ -552,7 +552,7 @@ These systems use AC, d20 attack rolls, and explicit damage dice—the combat ad
 ```
 [F:Skeleton|HP 13|AC 13|Close]
 
-R1
+Rd1
 @ Attack with shortsword
 d: d20+4=17 vs AC 13 -> Hit
 d: 1d6+2=7 damage
@@ -614,7 +614,7 @@ d: d20+4=15 vs AC 12 -> Hit, 1d8=5
 ✔ Complex fight:
 S5 *Warehouse ambush* [COMBAT]
 [F:Captain|HP 10|Close] [F:Guard×2|HP 4 each|Medium]
-R1
+Rd1
 @ Charge at Captain...
 ```
 
@@ -622,7 +622,7 @@ R1
 
 ```
 ✗ [COMBAT]
-  R1 Roster: [PC:Alex|HP 10] [F:Guard|HP 4|Close|armed|alert]
+  Rd1 Roster: [PC:Alex|HP 10] [F:Guard|HP 4|Close|armed|alert]
   @ Attack Guard
   d: d20+4=15 vs AC 10 -> Hit
   => [F:Guard|HP-6|dead]
@@ -713,11 +713,11 @@ R1
 
 | Convention | Format | Example |
 |------------|--------|---------|
-| Round marker | `R#` | `R1`, `R2`, `R3` |
+| Round marker | `Rd#` | `Rd1`, `Rd2`, `Rd3` |
 | Actor prefix | `@(Name) Action` | `@(Thug A) Slash at PC` |
 | Movement | `[Range->Range]` | `[Far->Close]` |
-| Round roster | `R# Roster: [tags]` | `R3 Roster: [PC:HP 3] [F:Boss\|HP 4]` |
-| Initiative note | `R1 (Init: Name #, …)` | `R1 (Init: Captain 18, Alex 15)` |
+| Round roster | `Rd# Roster: [tags]` | `Rd3 Roster: [PC:HP 3] [F:Boss\|HP 4]` |
+| Initiative note | `Rd1 (Init: Name #, …)` | `Rd1 (Init: Captain 18, Alex 15)` |
 
 ### Complete Example
 
@@ -725,7 +725,7 @@ R1
 S9 *Dockside ambush* [COMBAT]
 [PC:Alex|HP 12] [N:Jordan|ally|HP 8] [F:Pirate Captain|HP 10|Close] [F:Pirate×2|HP 4|Medium]
 
-R1
+Rd1
 @ Slash Captain d:19≥13 Hit 7dmg => [F:Captain|HP 3|staggered]
 @(Captain) Desperate swing d:11≥14 Miss
 @(Jordan) Fires at Pirate d:16≥11 Hit => [F:Pirate×1|dead]
@@ -744,7 +744,7 @@ R1
 A: When combat lasts three or more rounds, when multiple combatants act each round, or when turn order and position matter to the story. For single-roll fights, core notation is sufficient.
 
 **Q: Should I track initiative order?**
-A: Only if your system uses it and it matters. Most solo players go in logical order (threats first, then PC, then allies) or follow their system's rules. To note it: `R1 (Init: Captain 18, Alex 15, Jordan 12, Pirates 8)`.
+A: Only if your system uses it and it matters. Most solo players go in logical order (threats first, then PC, then allies) or follow their system's rules. To note it: `Rd1 (Init: Captain 18, Alex 15, Jordan 12, Pirates 8)`.
 
 **Q: Do I need `[F:]` tags, or can I just use `[N:]`?**
 A: Either works. `[F:]` is a convenience for separating combat stats from narrative NPC tags—it keeps your NPC index cleaner in long campaigns. For simple fights, `[N:]` is fine.
@@ -766,7 +766,7 @@ d: Goblin 1: 12≤14 Fail, Goblin 2: 17≥14 Success, Goblin 3: 8≤14 Fail
 A: This add-on covers personal-scale combat. Those scenarios may warrant their own add-ons—but the principles here (round markers, actor prefixes, position tracking) will apply.
 
 **Q: How does this work in an analog notebook?**
-A: Use `--- COMBAT ---` and `--- END COMBAT ---` as delimiters. Round markers (`R1`, `R2`) work as-is. For foe tags, write them in the margin or in a column beside the round text. Update HP with strikethroughs: ~~HP 6~~ HP 3.
+A: Use `--- COMBAT ---` and `--- END COMBAT ---` as delimiters. Round markers (`Rd1`, `Rd2`) work as-is. For foe tags, write them in the margin or in a column beside the round text. Update HP with strikethroughs: ~~HP 6~~ HP 3.
 
 **Q: When should I use round rosters?**
 A: When you have five or more combatants and stats are changing fast enough that you'd lose track without a summary. For smaller fights, tracking changes inline with foe tags is sufficient.
@@ -783,6 +783,7 @@ Written to address clarifications raised by u/Electorcountdonut, built upon exam
 
 **Version History:**
 
+- v 1.1.0: Round markers changed from `R#` to `Rd#` to avoid collision with `[R:]` room tags in the Dungeon Crawling Add-on
 - v 1.0.0: First version
 
 This work is licensed under the **Creative Commons Attribution-ShareAlike 4.0 International License**.
