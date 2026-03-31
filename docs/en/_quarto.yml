@@ -24,7 +24,7 @@ format:
     include-in-header:
       - _extensions/typst-template.typ
 
-  html:
+  odt:
     toc: true
 
   epub:
