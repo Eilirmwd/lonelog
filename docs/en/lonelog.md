@@ -2,7 +2,7 @@
 title: Lonelog
 subtitle: "A Standard Notation for Solo RPG Session Logging"
 author: Roberto Bisceglie
-version: 1.3.0
+version: 1.4.0
 license: CC BY-SA 4.0
 lang: en
 ---
@@ -222,6 +222,29 @@ The `@` symbol represents you, the player, acting in the game world. Think of it
 ? Does the rope hold?
 ? Is the merchant honest?
 ```
+
+#### 3.1.1 Multiple Actors
+
+When you play more than one character—a party of PCs, a PC with a companion, or a scene where you want to log NPC actions explicitly—use `@(Name)` to attribute an action to a specific actor. The bare `@` always means the primary (or default) PC.
+
+| Actor | Format | Example |
+|-------|--------|---------|
+| Primary PC | `@ Action` | `@ Pick the lock` |
+| Named PC | `@(Name) Action` | `@(Elara) Covers the door` |
+| Companion / ally NPC | `@(Name) Action` | `@(Jonah) Distracts the guard` |
+
+```
+@ Slip into the archive
+@(Jonah) Keeps watch at the door
+d: Stealth d6=5 vs TN 4 -> Success
+=> We're inside without raising the alarm.
+```
+
+This convention requires no new symbols—it simply extends `@` with a parenthetical to identify who is acting.
+
+**When to use it:** Any time ambiguity about who is acting would require prose clarification anyway: co-op solo play, games with a party, or scenes where a companion's action has its own mechanical resolution.
+
+**Note:** The Combat Add-on (§4 Actor Actions) expands this convention for tactical encounters, adding enemy and group attributions and integrating it with round tracking.
 
 ### 3.2 Resolutions
 
@@ -2009,7 +2032,8 @@ Bookmark this section. You'll come back to it often in your first few sessions, 
 
 | Symbol | Meaning | Example |
 |--------|---------|---------|
-| `@` | Player action (mechanics) | `@ Pick the lock` |
+| `@` | Player action — primary/default PC | `@ Pick the lock` |
+| `@(Name)` | Action attributed to a named actor (other PC, companion, NPC) | `@(Jonah) Covers the door` |
 | `?` | Oracle question (world/uncertainty) | `? Is anyone inside?` |
 | `d:` | Mechanics roll/result | `d: 2d6=8 vs TN 7 -> Success` |
 | `->` | Oracle/dice result | `-> Yes, but...` |
@@ -2159,6 +2183,7 @@ This notation is inspired by the [Valley Standard](https://alfredvalley.itch.io/
 
 **Version History:**
 
+- v 1.4.0: Added §3.1.1 Multiple Actors — `@(Name)` convention for multi-PC and companion play, promoted from the Combat Add-on.
 - v 1.3.0: Added tag category syntax (§4.1.7), multi-line tag form (§4.1.8), and roll context blocks inside `d:` (§3.2.1).
 - v 1.2.0: Added Section 10: Add-ons.
 - v 1.1.0: Clarified the use of the license. Added specifications for inline definitions, filtered option sets and multi-line result blocks in section 4.3.
